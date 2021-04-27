@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Home-List of Playlists</title>
+</head>
+<body>
+	<h1>List of your Playlists</h1>
+	<table border=1>
+		<thead>
+			<tr>
+				<th>TITLE</th>
+				<th>CREATION-DATE</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="playlist : ${playlists}">
+				<td th:text="${playlist.title}">Rock</td>
+				<td th:text="${playlist.creation_date}">2021-04-19</td>			
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
