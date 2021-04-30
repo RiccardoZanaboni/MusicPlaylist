@@ -15,8 +15,13 @@
 		</thead>
 		<tbody>
 			<tr th:each="playlist : ${playlists}">
-				<td th:text="${playlist.title}">Rock</td>
-				<td th:text="${playlist.creation_date}">2021-04-19</td>			
+				<td>
+					<a href="details.html"  th:href="@{http://localhost:8080/PlaylistPage}">
+						<span th:text="${playlist.title}">Rock </span>
+					</a>
+				</td>
+				<td th:text="${playlist.creation_date}">2021-04-19</td>	
+				
 			</tr>
 		</tbody>
 	</table>
