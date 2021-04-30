@@ -17,7 +17,7 @@
 			<tbody>
 				<tr th:each="playlist : ${playlists}">
 					<td>
-						<a href="details.html"  th:href="@{http://localhost:8080/PlaylistPage}">
+						<a th:href="@{/GetPlaylist(playlistId=${playlist.id})}">
 							<span th:text="${playlist.title}">Rock </span>
 						</a>
 					</td>

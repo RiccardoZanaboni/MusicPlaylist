@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>List of Songs</title>
+</head>
+<body>
+	<h1>Playlist <span th:text="${playlist.title}">GUE</span></h1>
+	<div id="songs_table">
+		<table border=1>
+			<thead>
+				<tr>
+					<th>TITLE</th>
+					<th>RELEASE_DATE</th>
+					<th>MUSICAL_GENRE</th>
+					
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="song : ${songs}">
+					<td>
+						<a th:href="@{/SongDetails(playlistId=${song.id})}">
+							<span th:text="${song.title}">Lifestyle</span>
+						</a>
+					</td>
+					<td th:text="${song.release_date}">2021-04-19</td>		
+					<td th:text="${song.musical_genre}">Rap</td>
+						
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<br>
+	<div>
+		<form th:action="@{/AddSong}" method="POST">
+			<label for="Song_title">Title of the Song:</label>
+			<br>
+			<input type="text" id="s_title" name="song_title" required>
+			<input type="submit" value="Add Song">
+		</form>
+	</div>
+
+</body>
+</html>

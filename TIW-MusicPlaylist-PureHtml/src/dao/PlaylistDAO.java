@@ -38,6 +38,22 @@ public class PlaylistDAO{
 		return playlists;
 	}
 	
+	public Playlist findPlaylistById(int playlistId) throws SQLException{
+		Playlist playlist = new Playlist();
+		String query = "SELECT title, creation_date FROM playlist where id = ?";
+		try (PreparedStatement pstatement = con.prepareStatement(query);) {
+			pstatement.setInt(1, playlistId);
+			try (ResultSet result = pstatement.executeQuery();) {
+				while (result.next()) {
+					playlist.setId(playlistId);
+					playlist.setTitle(result.getString("title"));
+					playlist.setCreation_date(result.getDate("creation_date"));
+				}
+			}
+		}
+		return playlist;
+	}
+	
 	
 	//Metodo utilizzato per inserire una nuova playlist creata dall utente con la form della Home.html nel db
 	public int createPlaylist(String title, Date date, int creatorid) throws SQLException {
