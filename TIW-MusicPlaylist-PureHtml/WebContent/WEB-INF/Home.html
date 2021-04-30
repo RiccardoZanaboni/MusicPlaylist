@@ -6,19 +6,30 @@
 </head>
 <body>
 	<h1>List of your Playlists</h1>
-	<table border=1>
-		<thead>
-			<tr>
-				<th>TITLE</th>
-				<th>CREATION-DATE</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="playlist : ${playlists}">
-				<td th:text="${playlist.title}">Rock</td>
-				<td th:text="${playlist.creation_date}">2021-04-19</td>			
-			</tr>
-		</tbody>
-	</table>
+	<div id="playlists_table">
+		<table border=1>
+			<thead>
+				<tr>
+					<th>TITLE</th>
+					<th>CREATION-DATE</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="playlist : ${playlists}">
+					<td th:text="${playlist.title}">Rock</td>
+					<td th:text="${playlist.creation_date}">2021-04-19</td>			
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<br>
+	<div>
+		<form th:action="@{/CreatePlaylist}" method="POST">
+			<label for="playlist_title">Title of the new playlist:</label>
+			<br>
+			<input type="text" id="p_title" name="playlist_title" required>
+			<input type="submit" value="Add Playlist">
+		</form>
+	</div>
 </body>
 </html>
