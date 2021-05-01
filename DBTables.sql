@@ -13,11 +13,11 @@ CREATE TABLE `song`
 (  
 `id` int(11) NOT NULL AUTO_INCREMENT,
 `title` varchar(45) NOT NULL,
-`image` varbinary(8000)NOT NULL,
+`image` LONGBLOB NOT NULL,
 `singer` varchar(45) NOT NULL,
 `release_date` date NOT NULL,
 `musical_genre` varchar(45) NOT NULL,
-`file` varbinary(8000)NOT NULL,  
+`file` LONGBLOB NULL,  
 `creator` int(11) NOT NULL,
 `playlist` int(11) NOT NULL,    
 PRIMARY KEY (`id`),  
