@@ -13,19 +13,22 @@
 					<th>TITLE</th>
 					<th>RELEASE_DATE</th>
 					<th>MUSICAL_GENRE</th>
+					<th>IMAGE</th>
+					
 					
 				</tr>
 			</thead>
 			<tbody>
 				<tr th:each="song : ${songs}">
 					<td>
-						<a th:href="@{/SongDetails(playlistId=${song.id})}">
+						<a th:href="@{/SongDetails(songId=${song.id})}">
 							<span th:text="${song.title}">Lifestyle</span>
 						</a>
 					</td>
 					<td th:text="${song.release_date}">2021-04-19</td>		
 					<td th:text="${song.musical_genre}">Rap</td>
-						
+					<td> <img th:src="@{'data:image/png;base64,'+${song.image}}"/></td>
+					
 				</tr>
 			</tbody>
 		</table>

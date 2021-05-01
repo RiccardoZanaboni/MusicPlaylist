@@ -1,4 +1,5 @@
 package beans;
+import java.io.InputStream;
 import java.util.Date;
 
 public class Song{
@@ -9,10 +10,9 @@ public class Song{
 	private Date release_date;
 	private int creator;
 	private Playlist playlist;
-
-	/*private File file;  //FIXME ADD FILE AND IMAGE
-	private Image image
-	*/
+	private InputStream file;  //FIXME ADD FILE AND IMAGE
+	private String image;
+	
 	public int getId() {
 		return id;
 	}
@@ -67,6 +67,22 @@ public class Song{
 	
 	public void setPlaylist(Playlist playlist) {
 		this.playlist = playlist ;
+	}
+
+	public InputStream getFile() {
+		return file;
+	}
+
+	public void setFile(InputStream file) {
+		this.file = file;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String encoded) {
+		this.image = encoded;
 	}
 	
 	

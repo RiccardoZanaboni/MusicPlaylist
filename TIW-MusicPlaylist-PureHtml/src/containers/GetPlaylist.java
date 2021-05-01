@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -14,7 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -23,7 +21,6 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import beans.Playlist;
 import beans.Song;
-import beans.User;
 import dao.PlaylistDAO;
 import dao.SongDAO;
 
@@ -61,7 +58,6 @@ public class GetPlaylist extends HttpServlet {
     }
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession s = request.getSession();
 		Integer playlistId = null;
 		try {
 			playlistId = Integer.parseInt(request.getParameter("playlistId"));
@@ -75,7 +71,7 @@ public class GetPlaylist extends HttpServlet {
 		try {
 			playlist = pDao.findPlaylistById(playlistId);
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's songs extraction");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's  extraction");
 			return;
 		}
 		SongDAO sDao = new SongDAO(connection);
@@ -83,6 +79,7 @@ public class GetPlaylist extends HttpServlet {
 		try {
 			songs = sDao.findSongById(playlistId);
 		}catch(SQLException e) {
+			System.out.println(e);
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's songs extraction");
 			return;
 		}
