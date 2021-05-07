@@ -53,7 +53,31 @@ public class SongDAO {
 		return songs;
 	}
 	
-	public int createSong(String songT, String singer, String genre, Date date) throws SQLException{
-		return 0;
+	public int createSong(String songT,InputStream imageContent, String singer, Date date, String genre, int creatorid ) throws SQLException{
+		String query = "INSERT into song (title, image, singer, release_date, musical_genre, creator) VALUES (?, ?, ?, ?, ?, ?)";
+		int code = 0;
+		PreparedStatement pStatement = null;
+		try {
+			pStatement = con.prepareStatement(query);
+			pStatement.setString(1, songT);
+			pStatement.setBlob(2, imageContent);
+			pStatement.setString(3, singer);
+			pStatement.setObject(4, date);
+			pStatement.setString(5, genre);
+			pStatement.setInt(6, creatorid);
+			code = pStatement.executeUpdate();
+		}catch(SQLException e) {
+			System.out.println(e);
+			throw new SQLException(e);
+		}finally {
+			try {
+				if (pStatement != null) {
+					pStatement.close();
+				}
+			} catch (Exception e1) {
+
+			}
+		}
+		return code;
 	}
 }

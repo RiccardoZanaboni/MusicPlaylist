@@ -1,6 +1,7 @@
 package containers;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -11,11 +12,13 @@ import java.util.Date;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.UnavailableException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Part;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -32,7 +35,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/CreatSong")
+@MultipartConfig
+@WebServlet("/CreateSong")
 public class CreateSong extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private Connection	connection = null;
@@ -75,12 +79,13 @@ public class CreateSong extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession s = request.getSession();
 		User u = (User) s.getAttribute("user");
+		int userid = u.getId();
 		String song_title = request.getParameter("song_title");
 		String singer = request.getParameter("singer");
-		String genre = request.getParameter("genre");
+		String genre = request.getParameter("music_genre");
 		String release_date = request.getParameter("release_date");
-		
-		//parte del blob mancante
+		Part image_part = request.getPart("song_image");
+		InputStream imageContent = image_part.getInputStream();
 		
 		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty()){
 			String error = "missing parameters";
@@ -98,10 +103,12 @@ public class CreateSong extends HttpServlet {
 		SongDAO sDao = new SongDAO(connection);
 		
 		try {
-			sDao.createSong(song_title, singer, genre, date);
+			sDao.createSong(song_title, imageContent, singer, date , genre, userid);
 		}catch(SQLException e2) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ("Failure creating the song in the db"));
 		}
+		String path = getServletContext().getContextPath() + "/GoToHomePage"; 
+		response.sendRedirect(path);
 	}
 
 }

@@ -38,7 +38,7 @@
 	<br>
 	<div id=song_form>
 		<h4>New Song</h4>
-		<form th:action="@{/CreateSong}" method="POST">
+		<form th:action="@{/CreateSong}" method="POST" enctype="multipart/form-data">
 			<label for="song_title">Title of the new song:</label>
 			<input type="text" id="song_title" name="song_title" required><br>
 			<label for="singer">Name of the singer:</label>
