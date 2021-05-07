@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 
 import beans.Song;
@@ -50,5 +51,9 @@ public class SongDAO {
 			}
 		}
 		return songs;
+	}
+	
+	public int createSong(String songT, String singer, String genre, Date date) throws SQLException{
+		return 0;
 	}
 }

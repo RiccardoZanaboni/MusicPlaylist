@@ -27,14 +27,31 @@
 		</table>
 	</div>
 	<br>
-	<div>
+	<div id=playlist_form>
+	<h4><b>New Playlist</b></h4>
 		<form th:action="@{/CreatePlaylist}" method="POST">
 			<label for="playlist_title">Title of the new playlist:</label>
-			<br>
-			<input type="text" id="p_title" name="playlist_title" required>
+			<input type="text" id="p_title" name="playlist_title" required><br>
 			<input type="submit" value="Add Playlist">
 		</form>
 	</div>
-
+	<br>
+	<div id=song_form>
+		<h4>New Song</h4>
+		<form th:action="@{/CreateSong}" method="POST">
+			<label for="song_title">Title of the new song:</label>
+			<input type="text" id="song_title" name="song_title" required><br>
+			<label for="singer">Name of the singer:</label>
+			<input type="text" id="singer" name="singer" required><br>
+			<label for="release_date">Release date:</label>
+			<input type="date" id="release_date" name="release_date" required><br>
+			<label for="music_genre">Music genre:</label>
+			<input type="text" id="music_genre" name="music_genre" required><br>
+			<label for="song_image">Choose an image</label>
+			<input type="file" id="song_image" name="song_image" required><br>
+			
+			<input type="submit" value="Add Song">
+		</form>
+	</div>
 </body>
 </html>

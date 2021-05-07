@@ -13,7 +13,7 @@ version="4.0">
   </context-param>
   <context-param>
     <param-name>dbPassword</param-name>
-    <param-value>ilrichi10</param-value>
+    <param-value></param-value>
   </context-param>
   <context-param>
     <param-name>dbDriver</param-name>

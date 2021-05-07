@@ -9,8 +9,8 @@ public class example {
       //Registering the Driver
       DriverManager.registerDriver(new com.mysql.jdbc.Driver());
       //Getting the connection
-      String mysqlUrl = "jdbc:mysql://localhost/dbmusicPlaylist";
-      Connection con = DriverManager.getConnection(mysqlUrl, "root", "ilrichi10");
+      String mysqlUrl = "jdbc:mysql://localhost/dbmusicplaylist";
+      Connection con = DriverManager.getConnection(mysqlUrl, "root", "Giantskeleton8");
       System.out.println("Connection established......");
       PreparedStatement pstmt = con.prepareStatement("INSERT INTO song VALUES(?,?,?,?,?,?,?,?,?)");
       pstmt.setInt(1, 1);
@@ -24,7 +24,7 @@ public class example {
 	  pstmt.setObject(5, date);
 
       //Inserting Blob type
-      InputStream in = new FileInputStream("C:\\Users\\Admin\\Pictures\\ciro.png");
+      InputStream in = new FileInputStream("/Users/fabiorossanigo/fiori.png");
       pstmt.setBlob(3, in);
       pstmt.setBlob(7, in);
       //Executing the statement
