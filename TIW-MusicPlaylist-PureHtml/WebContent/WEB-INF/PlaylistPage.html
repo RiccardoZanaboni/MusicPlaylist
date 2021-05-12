@@ -2,44 +2,56 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" type="text/css" media="all" href="../Css/PlaylistPageStyle.css" th:href="@{/Css/PlaylistPageStyle.css}" />
 <title>List of Songs</title>
+<style>
+table{
+	border : 3px solid black;
+	border-collapse : collapse;
+}
+
+td{
+	border : 3px solid black;
+}
+
+img{
+	width : 128px;
+	height : 128px;
+	padding : 15px;
+}
+
+.column{
+	text-align: center;
+}
+
+</style>
 </head>
 <body>
 	<h1>Playlist <span th:text="${playlist.title}">GUE</span></h1>
 	<div id="songs_table">
-		<table border=1>
-			<thead>
-				<tr>
-					<th>TITLE</th>
-					<th>RELEASE_DATE</th>
-					<th>MUSICAL_GENRE</th>
-					<th>IMAGE</th>
-					
-					
-				</tr>
-			</thead>
+		<table>
 			<tbody>
-				<tr th:each="song : ${songs}">
-					<td>
+				<tr>
+					<td class="column" th:each="song : ${songs}">
 						<a th:href="@{/SongDetails(songId=${song.id})}">
 							<span th:text="${song.title}">Lifestyle</span>
 						</a>
+						<div id=image>
+							<img th:src="@{'data:image/png;base64,'+${song.image}}"/>
+						</div>
 					</td>
-					<td th:text="${song.release_date}">2021-04-19</td>		
-					<td th:text="${song.musical_genre}">Rap</td>
-					<td> <img th:src="@{'data:image/png;base64,'+${song.image}}"/></td>
-					
 				</tr>
 			</tbody>
 		</table>
 	</div>
 	<br>
 	<div>
-		<form th:action="@{/AddSong}" method="POST">
-			<label for="Song_title">Title of the Song:</label>
-			<br>
-			<input type="text" id="s_title" name="song_title" required>
-			<input type="submit" value="Add Song">
+		<form th:action="@{/AddSong(playlistId=${playlist.id})}" method="POST">
+			<label for="song">Select the song</label>
+			<select name="song">
+				<option th:each="song : ${songsOfUser}" th:value="${song.id}"  th:text="${song.title}">Boogieman</option>
+			</select>
+			<input type="submit" value="Add song to the playlist">
 		</form>
 	</div>
 
