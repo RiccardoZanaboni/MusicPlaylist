@@ -39,12 +39,12 @@ public class SongDAO {
 					String image = new String(img64);
 					song.setImage(image);
 	
-					song.setSinger(result.getString("singer"));
-					song.setRelease_date(result.getDate("release_date"));
-					song.setMusical_genre(result.getString("musical_genre"));
+					//song.setSinger(result.getString("singer"));
+					//song.setRelease_date(result.getDate("release_date"));
+					//song.setMusical_genre(result.getString("musical_genre"));
 					
 					//file_blob= result.getBlob("file");
-					//InputStream file= file_blob.getBinaryStream();	Parti da aggiungere quando file sara' diverso da null
+					//InputStream file= file_blob.getBinaryStream();	
 					//song.setFile(file);
 					songs.add(song);
 				}
@@ -53,8 +53,8 @@ public class SongDAO {
 		return songs;
 	}
 	
-	public int createSong(String songT,InputStream imageContent, String singer, Date date, String genre, int creatorid ) throws SQLException{
-		String query = "INSERT into song (title, image, singer, release_date, musical_genre, creator) VALUES (?, ?, ?, ?, ?, ?)";
+	public int createSong(String songT,InputStream imageContent, String singer, Date date, String genre, InputStream fileContent, int creatorid ) throws SQLException{
+		String query = "INSERT into song (title, image, singer, release_date, musical_genre, file, creator) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		int code = 0;
 		PreparedStatement pStatement = null;
 		try {
@@ -64,7 +64,8 @@ public class SongDAO {
 			pStatement.setString(3, singer);
 			pStatement.setObject(4, date);
 			pStatement.setString(5, genre);
-			pStatement.setInt(6, creatorid);
+			pStatement.setBlob(6, fileContent);
+			pStatement.setInt(7, creatorid);
 			code = pStatement.executeUpdate();
 		}catch(SQLException e) {
 			System.out.println(e);
@@ -126,5 +127,38 @@ public class SongDAO {
 			}
 		}
 		return code;
+	}
+	
+	public Song findSongById(int songId) throws SQLException{
+		Song song = new Song();
+		String query = "SELECT id, title, image, singer, release_date, musical_genre, file FROM song where id = ?";
+		try (PreparedStatement pstatement = con.prepareStatement(query);) {
+			pstatement.setInt(1, songId);
+			Blob image_blob = null;
+			Blob file_blob = null;
+			try (ResultSet result = pstatement.executeQuery();) {
+				while (result.next()) {
+					song.setId(result.getInt("id"));
+					song.setTitle(result.getString("title"));
+					
+					image_blob= result.getBlob("image");
+					byte[] image_ba = image_blob.getBytes(1, (int) image_blob.length()); 
+					byte[] img64 =  Base64.getEncoder().encode(image_ba);
+					String image = new String(img64);
+					song.setImage(image);
+	
+					song.setSinger(result.getString("singer"));
+					song.setRelease_date(result.getDate("release_date"));
+					song.setMusical_genre(result.getString("musical_genre"));
+					
+					file_blob= result.getBlob("file");
+					byte[] file_ba = file_blob.getBytes(1, (int) file_blob.length()); 
+					byte[] file64 =  Base64.getEncoder().encode(file_ba);
+					String file = new String(file64);
+					song.setFile(file);
+				}
+			}
+		}
+		return song;
 	}
 }

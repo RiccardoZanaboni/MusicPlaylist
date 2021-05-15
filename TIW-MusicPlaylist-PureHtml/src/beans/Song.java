@@ -10,7 +10,7 @@ public class Song{
 	private Date release_date;
 	private int creator;
 	private Playlist playlist;
-	private InputStream file;  //FIXME ADD FILE AND IMAGE
+	private String file;  
 	private String image;
 	
 	public int getId() {
@@ -69,12 +69,12 @@ public class Song{
 		this.playlist = playlist ;
 	}
 
-	public InputStream getFile() {
+	public String getFile() {
 		return file;
 	}
 
-	public void setFile(InputStream file) {
-		this.file = file;
+	public void setFile(String encoded) {
+		this.file = encoded;
 	}
 
 	public String getImage() {
