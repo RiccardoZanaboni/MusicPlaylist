@@ -12,7 +12,7 @@
 			<tbody>
 				<tr>
 					<td class="column" th:each="song : ${songs}">
-						<a th:href="@{/SongDetails(songId=${song.id})}">
+						<a th:href="@{/GetSongDetails(songId=${song.id})}">
 							<span th:text="${song.title}">Lifestyle</span>
 						</a>
 						<div id=image>

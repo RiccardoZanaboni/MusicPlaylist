@@ -86,7 +86,9 @@ public class CreateSong extends HttpServlet {
 		String release_date = request.getParameter("release_date");
 		Part image_part = request.getPart("song_image");
 		InputStream imageContent = image_part.getInputStream();
-		
+		Part file_part = request.getPart("song_file");
+		InputStream fileContent = file_part.getInputStream();
+
 		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty()){
 			String error = "missing parameters";
 		}
@@ -103,7 +105,7 @@ public class CreateSong extends HttpServlet {
 		SongDAO sDao = new SongDAO(connection);
 		
 		try {
-			sDao.createSong(song_title, imageContent, singer, date , genre, userid);
+			sDao.createSong(song_title, imageContent, singer, date , genre, fileContent, userid);
 		}catch(SQLException e2) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ("Failure creating the song in the db"));
 		}
