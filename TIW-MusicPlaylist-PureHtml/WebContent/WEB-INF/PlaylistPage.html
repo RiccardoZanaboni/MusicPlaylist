@@ -2,29 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" media="all" href="../Css/PlaylistPageStyle.css" th:href="@{/Css/PlaylistPageStyle.css}" />
+<link rel="stylesheet" type="text/css" media="all" href="../CSS/PlaylistPageStyle.css" th:href="@{/CSS/PlaylistPageStyle.css}"/>
 <title>List of Songs</title>
-<style>
-table{
-	border : 3px solid black;
-	border-collapse : collapse;
-}
-
-td{
-	border : 3px solid black;
-}
-
-img{
-	width : 128px;
-	height : 128px;
-	padding : 15px;
-}
-
-.column{
-	text-align: center;
-}
-
-</style>
 </head>
 <body>
 	<h1>Playlist <span th:text="${playlist.title}">GUE</span></h1>

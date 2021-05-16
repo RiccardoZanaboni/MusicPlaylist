@@ -153,7 +153,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="TIW-MusicPlaylist-PureHtml" path="/TIW-MusicPlaylist-PureHtml" reloadable="true" source="org.eclipse.jst.jee.server:TIW-MusicPlaylist-PureHtml"/><Context docBase="TIW-projectManagementFilter" path="/TIW-projectManagementFilter" reloadable="true" source="org.eclipse.jst.jee.server:TIW-projectManagementFilter"/><Context docBase="TIW-Thymeleaf-examples" path="/TIW-Thymeleaf-examples" reloadable="true" source="org.eclipse.jst.jee.server:TIW-Thymeleaf-examples"/><Context docBase="TIW-example-message-JSTL" path="/TIW-example-message-JSTL" reloadable="true" source="org.eclipse.jst.jee.server:TIW-example-message-JSTL"/><Context docBase="TIW-ServletExamples" path="/TIW-ServletExamples" reloadable="true" source="org.eclipse.jst.jee.server:TIW-ServletExamples"/></Host>
+      <Context docBase="TIW-MusicPlaylist-PureHtml" path="/TIW-MusicPlaylist-PureHtml" reloadable="true" source="org.eclipse.jst.jee.server:TIW-MusicPlaylist-PureHtml"/><Context docBase="TIW-ServletExamples" path="/TIW-ServletExamples" reloadable="true" source="org.eclipse.jst.jee.server:TIW-ServletExamples"/><Context docBase="TIW-Thymeleaf-examples" path="/TIW-Thymeleaf-examples" reloadable="true" source="org.eclipse.jst.jee.server:TIW-Thymeleaf-examples"/></Host>
     </Engine>
   </Service>
 </Server>

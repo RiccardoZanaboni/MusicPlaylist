@@ -97,7 +97,6 @@ public class AddSong extends HttpServlet {
 		}
 		
 		String path = getServletContext().getContextPath() + "/GetPlaylist?playlistId="+playlistId;
-		System.out.println(path);
 		response.sendRedirect(path);
 	
 	}

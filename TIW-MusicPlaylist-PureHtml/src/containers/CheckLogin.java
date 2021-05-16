@@ -52,7 +52,7 @@ public class CheckLogin extends HttpServlet {
 		String pwd = request.getParameter("pwd");
 		
 		if (usrn == null || usrn.isEmpty() || pwd == null || pwd.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing parameters for the log in");
 			return;
 		}
 		

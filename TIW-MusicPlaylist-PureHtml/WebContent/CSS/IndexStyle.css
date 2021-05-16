@@ -1,0 +1,55 @@
+h1{
+	color : rgb(50, 76, 163);
+	font-size: 50px;
+	margin-top: 100px;
+
+}
+
+body{
+	text-align : center;
+	background-color: black;
+}
+
+div{
+	background-color : rgb(130, 153, 216);
+	border-radius : 15px;
+	margin-top : 100px;
+	margin-left : 400px;
+	margin-right : 400px;
+	padding-top : 55px;
+	padding-bottom : 70px;
+}
+
+label{
+	font-size: 35px;
+}
+.form_field:focus{
+	border: 3px solid rgb(51, 51, 51);
+}
+.form_field{
+	border: 3px solid #ccc;
+  	-webkit-transition: 0.5s;
+  	transition: 0.5s;
+  	outline: none;
+	height : 35px;
+	width : 300px;
+	border-radius : 13px;
+	font-size: 30px;
+	padding: 12px 20px;
+}
+
+#login_button{
+	border: 3px solid #ccc;
+	border-radius: 13px;
+	margin-top: 30px;
+	font-size: 40px;
+	width: 345px;
+	background-color: whitesmoke;
+	transition-duration: 0.3s;
+}
+
+#login_button:hover{
+	background-color : rgb(72, 105, 177);
+	color: whitesmoke;
+	border: solid  rgb(72, 105, 177);
+}

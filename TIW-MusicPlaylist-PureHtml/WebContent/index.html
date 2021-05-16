@@ -2,15 +2,19 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<link rel="stylesheet" type="text/css" media="all" href="CSS/IndexStyle.css"/>
 <title>Login page</title>
 </head>
 <body>
-	<h1>Welcome to Your Music Playlist</h1>
-	<form action="CheckLogin"
-		method="POST">
-		username: <input type="text" name="username"> <br>
-		password: <input type="password" name="pwd"><br> <input
-			type="submit" value="login">
-	</form>
+	<h1>Welcome to Your Music Playlist!</h1>
+	<div>
+		<form action="CheckLogin" method="POST">
+			<label for="username">Username:</label>
+			<br><input class="form_field" type="text" name="username"><br>
+			<label for="pwd">Password:</label>
+			<br><input class="form_field" type="password" name="pwd"><br> 
+			<input id="login_button" type="submit" value="Login">
+		</form>
+	</div>
 </body>
 </html>
