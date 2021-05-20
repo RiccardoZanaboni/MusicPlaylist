@@ -6,7 +6,7 @@
 <title>List of Songs</title>
 </head>
 <body>
-	<h1>Playlist <span th:text="${playlist.title}">GUE</span></h1>
+	<h1>Playlist <span id="ptitle" th:text="${playlist.title}">GUE</span></h1>
 	<div id="songs_table">
 		<table>
 			<tbody>
@@ -24,7 +24,7 @@
 		</table>
 	</div>
 	<br>
-	<div>
+	<div id="addsong-form">
 		<form th:action="@{/AddSong(playlistId=${playlist.id})}" method="POST">
 			<label for="song">Select the song</label>
 			<select name="song">

@@ -89,8 +89,13 @@ public class CreateSong extends HttpServlet {
 		Part file_part = request.getPart("song_file");
 		InputStream fileContent = file_part.getInputStream();
 
-		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty()){
+		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty() || release_date == null || release_date.isEmpty()){
 			String error = "missing parameters";
+		}
+		
+		if(image_part == null || image_part.getSize() <= 0 || file_part == null || file_part.getSize() <= 0) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing file in request!");
+			return;
 		}
 		
 		Date date = null;
@@ -101,6 +106,7 @@ public class CreateSong extends HttpServlet {
 		}catch(ParseException e1) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Date format");
 		}
+		
 		
 		SongDAO sDao = new SongDAO(connection);
 		

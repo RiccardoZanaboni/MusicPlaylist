@@ -58,6 +58,9 @@ public class GetSongDetails extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String sId = request.getParameter("songId");
+		if(sId == null || sId.isEmpty()) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing song id value");
+		}
 		Integer songId = null;
 		try {
 			songId = Integer.parseInt(sId);

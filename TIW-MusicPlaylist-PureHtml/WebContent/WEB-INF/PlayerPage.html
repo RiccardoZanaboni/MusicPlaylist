@@ -2,11 +2,14 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<link rel="stylesheet" type="text/css" media="all" href="../Css/PlayerPage.css" th:href="@{/Css/PlayerPage.css?version=2}" />
+<link rel="stylesheet" type="text/css" media="all" href="../CSS/PlayerPage.css" th:href="@{/CSS/PlayerPage.css}" />
 <title>Song Details</title>
 </head>
 <body>
 	<h1 th:text="${song.title}">Happy Birthday </h1>
+	<div id="singer" class="details">Singer : <span th:text="${song.singer}">Sfera</span></div>
+	<div id="genre" class="details">Genre : <span th:text="${song.musical_genre}">Boh</span></div>
+	<div id="release_date" class="details">Release Date : <span th:text="${song.release_date}">29-04-2018</span></div>
 	<div id="image"><img th:src="@{'data:image/png;base64,'+${song.image}}"/></div>
 	<audio controls>
   	<source th:src="@{'data:audio/mpeg;base64,'+${song.file}}" type="audio/mpeg">

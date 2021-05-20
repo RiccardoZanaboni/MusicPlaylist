@@ -34,7 +34,6 @@ public class GetPlaylist extends HttpServlet {
 
 	public GetPlaylist() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public void init() throws ServletException{
@@ -61,7 +60,10 @@ public class GetPlaylist extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String pId = request.getParameter("playlistId");
-		//TODO Da fare il controllo sulla stringa
+		if(pId == null || pId.isEmpty()) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing the playlist id");
+		}
+		
 		Integer playlistId = null;
 		try {
 			playlistId = Integer.parseInt(pId);

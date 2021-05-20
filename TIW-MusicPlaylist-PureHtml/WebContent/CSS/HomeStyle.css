@@ -1,0 +1,65 @@
+body{
+    background-color: rgb(46, 41, 41);
+}
+
+h1{
+    text-align: center;
+    color: rgb(9, 214, 43);
+}
+
+table{
+    margin-left: auto;
+    margin-right: auto;
+    width: 30%;
+    text-align: center;
+    border: none;
+}
+
+#playlist_form{
+    float: right;
+    margin-right: 8%;
+    text-align: center;
+    background-color: rgb(92, 194, 109);
+    font-size: 20px;
+    padding: 40px;
+    padding-bottom: 40px;
+    border-radius: 15px;
+}
+
+#song_form{
+    float: left;
+    margin-left: 2%;
+    text-align: center;
+    background-color: rgb(92, 194, 109);
+    font-size: 20px;
+    padding: 20px;
+    padding-bottom: 100px;
+    border-radius: 15px;
+}
+
+input{
+    border: 3px #ccc;
+  	outline: none;
+	height : 10px;
+	width : 200px;
+	border-radius : 13px;
+	font-size: 20px;
+	padding: 12px 20px;
+    padding-bottom: 15px;
+}
+input[type="file"]{
+    padding: 20px;
+}
+
+input[type="submit"]{
+    margin-top: 20px;
+    padding-bottom: 40px;
+    
+}
+
+thead,th,td,tr{
+    background-color: rgb(92, 194, 109);
+    border-radius: 15px;
+    padding : 15px;
+    font-size: 25px;
+}

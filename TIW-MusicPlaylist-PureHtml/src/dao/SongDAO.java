@@ -22,7 +22,7 @@ public class SongDAO {
 	
 	public List<Song> findSongByPlaylistId(int playlistId) throws SQLException{
 		List<Song> songs = new ArrayList<Song>();
-		String query = "SELECT id, title, image, singer, release_date, musical_genre FROM song where playlist = ?";
+		String query = "SELECT id, title, image FROM song where playlist = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, playlistId);
 			Blob image_blob = null;
