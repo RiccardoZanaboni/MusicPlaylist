@@ -60,6 +60,8 @@ public class GetPlaylist extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String pId = request.getParameter("playlistId");
+		String sId = request.getParameter("songId");
+		
 		if(pId == null || pId.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing the playlist id");
 		}
@@ -72,6 +74,19 @@ public class GetPlaylist extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
 			return;
 		}
+		
+		if(sId == null || sId.isEmpty()) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing the starting songid");
+		}
+		Integer startingSongId = null;
+		try {
+			startingSongId = Integer.parseInt(sId);
+		} catch (NumberFormatException | NullPointerException e) {
+			// only for debugging e.printStackTrace();
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
+			return;
+		}
+		
 		PlaylistDAO pDao= new PlaylistDAO(connection);
 		Playlist playlist = null;
 		try {
@@ -83,6 +98,7 @@ public class GetPlaylist extends HttpServlet {
 		SongDAO sDao = new SongDAO(connection);
 		List<Song> songs = null;
 		List<Song> songsOfUser = null;
+		List<Song> songToView = null;
 		HttpSession s = request.getSession();
 		User u = (User) s.getAttribute("user");
 		int userId = u.getId();
@@ -94,12 +110,29 @@ public class GetPlaylist extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's songs extraction");
 			return;
 		}
+		
+		songToView = songs;
+		Integer songsSize = songs.size();
+		if ((songsSize-startingSongId) > 0) {
+			if((songsSize-startingSongId)>5) {
+				songToView = songs.subList(startingSongId, (startingSongId+5));
+			}else {
+				songToView = songs.subList(startingSongId, (startingSongId+(songs.size()-startingSongId)));
+			}
+		}
+	
+		Integer nextSongId = startingSongId+5;
+		Integer previousSongId = startingSongId-5;
+		
 		String path = "WEB-INF/PlaylistPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("playlist",playlist);
-		ctx.setVariable("songs", songs);
+		ctx.setVariable("songToView", songToView);
 		ctx.setVariable("songsOfUser", songsOfUser);
+		ctx.setVariable("nextSongId",nextSongId);
+		ctx.setVariable("previousSongId",previousSongId);
+		ctx.setVariable("songsSize", songsSize);
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 	

@@ -102,7 +102,7 @@ public class AddSong extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Cannot insert the song in the playlist by the DB side");
 		}
 		
-		String path = getServletContext().getContextPath() + "/GetPlaylist?playlistId="+playlistId;
+		String path = getServletContext().getContextPath() + "/GetPlaylist?playlistId="+playlistId+"&songId=0";	//Al momento dopo aver aggiunto una canzone ritorno alla prima pagina
 		response.sendRedirect(path);
 	
 	}

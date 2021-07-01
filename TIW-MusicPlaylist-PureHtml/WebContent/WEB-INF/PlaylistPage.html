@@ -8,10 +8,11 @@
 <body>
 	<h1>Playlist <span id="ptitle" th:text="${playlist.title}">GUE</span></h1>
 	<div id="songs_table">
-		<table>
+		<div  th:if="${#lists.isEmpty(songToView)}"><h3>La playlist non contiene ancora brani musicali</h3></div>
+		<table th:unless="${#lists.isEmpty(songToView)}">
 			<tbody>
 				<tr>
-					<td class="column" th:each="song : ${songs}">
+					<td class="column" th:each="song : ${songToView}">
 						<a th:href="@{/GetSongDetails(songId=${song.id})}">
 							<span th:text="${song.title}">Lifestyle</span>
 						</a>
@@ -22,6 +23,19 @@
 				</tr>
 			</tbody>
 		</table>
+	</div>
+	<br>
+	<div>
+		<div  id="leftbutton" th:if="${previousSongId} >= 0">
+			<form th:action="@{/GetPlaylist(playlistId=${playlist.id},songId=${previousSongId})}" method="POST">
+				<input class="buttons" type="submit" value="PRECEDENTI">
+			</form>
+		</div>
+		<div id="rightbutton"  th:if="${songsSize} > ${nextSongId}">
+			<form th:action="@{/GetPlaylist(playlistId=${playlist.id},songId=${nextSongId})}" method="POST">
+				<input class="buttons" type="submit" value="SUCCESSIVI">
+			</form>
+		</div>
 	</div>
 	<br>
 	<div id="addsong-form">
