@@ -19,19 +19,7 @@ version="4.0">
     <param-name>dbDriver</param-name>
     <param-value>com.mysql.cj.jdbc.Driver</param-value>
   </context-param>
-  <filter> 
-      <filter-name>LoginChecker</filter-name>
-      <filter-class>filters.LoginChecker</filter-class> 
- </filter> 
- <filter-mapping> 
-    <filter-name>LoginChecker</filter-name> 
-    <url-pattern>/GoToHomePage</url-pattern> 
-    <url-pattern>/GetPlaylist</url-pattern> 
-    <url-pattern>/CreatPlaylist</url-pattern> 
-    <url-pattern>/CreateSong</url-pattern> 
-    <url-pattern>/AddSong</url-pattern> 
- </filter-mapping> 
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
-</web-app>
+ </web-app>
