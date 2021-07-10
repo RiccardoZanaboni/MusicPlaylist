@@ -1,1 +1,34 @@
-<p>WELCOME!</p>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Home</title>
+<link rel="stylesheet" type="text/css" media="all" href="CSS/HomeStyle.css" />
+<script src="utils.js" charset="utf-8" defer></script>
+<script src="homeManagement.js" charset="utf-8" defer></script>
+</head>
+<body>
+<h1>List of your Playlists</h1>
+	<div>
+		<table border=1 id="id_playlistcontainer">
+			<thead>
+				<tr>
+					<th>TITLE</th>
+					<th>CREATION-DATE</th>
+				</tr>
+			</thead>
+			<tbody id=id_playlistcontainerbody>
+			</tbody>
+		</table>
+	</div>
+	<div id="playlist_form">
+		<h4><b>New Playlist</b></h4>
+		<form id="id_createplaylistform" action="#">
+			<label for="title">Title of the new Playlist:</label>
+			<br><input class="form_field" type="text" name="title" required><br>
+			<input type="button" value="Add Playlist" name="submit" class="submit">
+		</form>					
+	</div>
+	<div id="id_alert" class="alertmessage"></div>
+</body>
+</html>
