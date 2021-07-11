@@ -29,6 +29,26 @@
 			<input type="button" value="Add Playlist" name="submit" class="submit">
 		</form>					
 	</div>
+	<div id="song_form">
+		<h4>New Song</h4>
+		<form id="id_createsongform" action="#">
+			<fieldset>
+				<label for="song_title">Title of the new song:</label><br>
+				<input type="text" id="song_title" name="song_title" required><br>
+				<label for="singer">Name of the singer:</label><br>
+				<input type="text" id="singer" name="singer" required><br>
+				<label for="release_date">Release date:</label><br>
+				<input type="date" id="release_date" name="release_date" required><br>
+				<label for="music_genre">Music genre:</label><br>
+				<input type="text" id="music_genre" name="music_genre" required><br>
+				<label for="song_image">Choose an image</label>
+				<input type="file" id="song_image" name="song_image"><br>
+				<label for="song_file">Choose a mp3 file</label>
+				<input type="file" id="song_file" name="song_file"><br>
+				<input type="button" value="Add Song" name="submit" class="submit">
+			</fieldset>
+		</form>
+	</div>
 	<div id="id_alert" class="alertmessage"></div>
 </body>
 </html>

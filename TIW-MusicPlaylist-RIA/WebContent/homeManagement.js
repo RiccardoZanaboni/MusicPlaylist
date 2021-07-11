@@ -1,7 +1,7 @@
 { // avoid variables ending up in the global scope
 
 	  // page components
-	  let playlistList,
+	  let playlistList,playlistForm,songForm
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 
 	  window.addEventListener("load", () => {
@@ -72,13 +72,13 @@
 	    }
 	  }
 
-	function Wizard(wizardId, alert) {
-	    this.wizard = wizardId;
+	function PlaylistForm(playlistId, alert) {
+	    this.playlistForm = playlistId;
 	    this.alert = alert;
 
 	    this.registerPlaylist = function(orchestrator) {
 	      // Manage submit button
-	      this.wizard.querySelector("input[type='button'].submit").addEventListener('click', (e) => {
+	      this.playlistForm.querySelector("input[type='button'].submit").addEventListener('click', (e) => {
 	        var playlist_title = e.target.closest("input"),valid = true;
 	        if (!playlist_title.checkValidity()) {
 	            playlist_title.reportValidity();
@@ -108,8 +108,52 @@
 	      });
 		}
 		this.reset = function() {
-	      var title = document.querySelectorAll("#" + this.wizard.id + " title");
+	      var title = document.querySelectorAll("#" + this.playlistForm.id + " title");
 	      title.hidden = true;
+	    }
+	}
+
+	function SongForm(songId, alert) {
+	    this.songForm = songId;
+	    this.alert = alert;
+
+	    this.registerSong = function(orchestrator) {
+	      // Manage submit button
+	      this.songForm.querySelector("input[type='button'].submit").addEventListener('click', (e) => {
+	        var song_fieldset = e.target.closest("fieldset"),valid = true; 
+	        for (i = 0; i < song_fieldset.elements.length; i++) {
+	          if (!song_fieldset.elements[i].checkValidity()) {
+	            song_fieldset.elements[i].reportValidity();
+	            valid = false;
+	            break;
+	          }
+	        }
+
+	        if (valid) {
+	          var self = this;
+	          makeCall("POST", 'CreateSong', e.target.closest("form"),
+	            function(req) {
+	              if (req.readyState == XMLHttpRequest.DONE) {
+	                var message = req.responseText; // error message or mission id
+	                if (req.status == 200) {
+	                  orchestrator.refresh(); // id of the new mission passed
+	                } else if (req.status == 403) {
+                      window.location.href = req.getResponseHeader("Location");
+                      window.sessionStorage.removeItem('username');
+                  }
+                  else {
+	                  self.alert.textContent = message;
+	                  self.reset();
+	                }
+	              }
+	            }
+	          );
+	        }
+	      });
+		}
+		this.reset = function() {
+	      var input = document.querySelectorAll("#" + this.songForm.id + " input");
+	      input.hidden = true;
 	    }
 	}
 
@@ -122,14 +166,17 @@
 	        document.getElementById("id_playlistcontainer"),
 	        document.getElementById("id_playlistcontainerbody"));
 
-		  wizard = new Wizard(document.getElementById("id_createplaylistform"), alertContainer);
-	      wizard.registerPlaylist(this);  // the orchestrator passes itself --this-- so that the wizard can call its refresh function after creating a mission
+		  playlistForm = new PlaylistForm(document.getElementById("id_createplaylistform"), alertContainer);
+	      playlistForm.registerPlaylist(this);  // the orchestrator passes itself --this-- so that the playlistForm can call its refresh function after creating a mission
 	    };
+		  songForm = new SongForm(document.getElementById("id_createsongform"), alertContainer);
+		  songForm.registerSong(this);
 
 		this.refresh = function() {
 	      alertContainer.textContent = "";        // not null after creation of status change
 	      playlistList.show();
-		  wizard.reset();
+		  playlistForm.reset();
+		  songForm.reset(); //CONTROLLARE SE ANCHE SENZA I RESET I VALORI VENGO AZZERATI
 	  	};
 	  }	
 }
