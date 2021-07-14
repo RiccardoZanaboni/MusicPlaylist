@@ -79,7 +79,7 @@
 	    this.registerPlaylist = function(orchestrator) {
 	      // Manage submit button
 	      this.playlistForm.querySelector("input[type='button'].submit").addEventListener('click', (e) => {
-	        var playlist_title = e.target.closest("input"),valid = true;
+	        var playlist_title = e.target.closest("form"),valid = true;
 	        if (!playlist_title.checkValidity()) {
 	            playlist_title.reportValidity();
 	            valid = false;
@@ -108,7 +108,7 @@
 	      });
 		}
 		this.reset = function() {
-	      var title = document.querySelectorAll("#" + this.playlistForm.id + " title");
+	      var title = document.querySelectorAll("#" + this.playlistForm.id + " form");
 	      title.hidden = true;
 	    }
 	}
@@ -152,7 +152,7 @@
 	      });
 		}
 		this.reset = function() {
-	      var input = document.querySelectorAll("#" + this.songForm.id + " input");
+	      var input = document.querySelectorAll("#" + this.songForm.id + " form");
 	      input.hidden = true;
 	    }
 	}
