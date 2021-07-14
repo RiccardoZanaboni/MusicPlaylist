@@ -6,11 +6,27 @@ h1{
     text-align: center;
     color: rgb(9, 214, 43);
 }
+.show{
+	display : inline-block;
+}
+#playlistlist{
+	float : left;
+}
+
+#maincontainer{
+	height : 500px;
+}
+
+#leftbutton{
+	float : left;
+}
+
+#rightbutton{
+	float : right;
+}
+
 
 table{
-    margin-left: auto;
-    margin-right: auto;
-    width: 30%;
     text-align: center;
     border: none;
 }

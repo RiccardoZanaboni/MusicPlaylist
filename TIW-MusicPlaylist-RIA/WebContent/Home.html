@@ -9,7 +9,8 @@
 </head>
 <body>
 <h1>List of your Playlists</h1>
-	<div>
+<div id="maincontainer">
+	<div id="playlistlist" class="show">
 		<table border=1 id="id_playlistcontainer">
 			<thead>
 				<tr>
@@ -21,6 +22,33 @@
 			</tbody>
 		</table>
 	</div>
+	<div id="songscontainer" class="show">
+		<div id="songs_table">
+		<table id="id_songscontainer">
+			<tbody id="id_songscontainerbody">
+				<tr>
+					<td>
+
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div>
+		<div  id="leftbutton">
+			<form action="#">
+				<input class="buttons" type="button" name="submit" value="PRECEDENTI">
+			</form>
+		</div>
+		<div id="rightbutton">
+			<form action="#">
+				<input class="buttons" type="button" name="submit" value="SUCCESSIVI">
+			</form>
+		</div>
+	</div>
+</div>
+	<br>
 	<div id="playlist_form">
 		<h4><b>New Playlist</b></h4>
 		<form id="id_createplaylistform" action="#">
