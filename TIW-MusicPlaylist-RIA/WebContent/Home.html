@@ -54,6 +54,7 @@
 		<form id="id_createplaylistform" action="#">
 			<label for="title">Title of the new Playlist:</label>
 			<br><input class="form_field" type="text" name="title" required><br>
+			<input type="hidden" name="playlistid"> 
 			<input type="button" value="Add Playlist" name="submit" class="submit">
 		</form>					
 	</div>
@@ -73,6 +74,7 @@
 				<input type="file" id="song_image" name="song_image"><br>
 				<label for="song_file">Choose a mp3 file</label>
 				<input type="file" id="song_file" name="song_file"><br>
+				<input type="hidden" name="playlistid"> 
 				<input type="button" value="Add Song" name="submit" class="submit">
 			</fieldset>
 		</form>

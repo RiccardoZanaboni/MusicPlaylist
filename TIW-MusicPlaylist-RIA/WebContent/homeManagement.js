@@ -18,7 +18,7 @@
 	    this.playlistcontainer = _playlistcontainer;
 	    this.playlistcontainerbody = _playlistcontainerbody;
 
-	    this.show = function() {
+	    this.show = function(next) {
 	      var self = this;
 	      makeCall("GET", "GetPlaylistData", null,
 	        function(req) {
@@ -31,6 +31,7 @@
 	                return;
 	              }
 	              self.update(playlistToShow); // self visible by closure
+			      if (next) next(); // show the default element of the list if present
 	            
 	          } else if (req.status == 403) {
                   window.location.href = req.getResponseHeader("Location");
@@ -59,6 +60,7 @@
 	        anchor.addEventListener("click", (e) => {  
 	          // dependency via module parameter
 	          playlistDetails.show(e.target.getAttribute("playlistid")); // the list must know the details container
+			  
 	        }, false);
 	        anchor.href = "#";
 	        row.appendChild(linkcell);
@@ -70,27 +72,39 @@
 	      this.playlistcontainer.style.visibility = "visible";
 
 	    }
+
+		this.autoclick = function(playlistId) {
+	      var e = new Event("click");
+	      var selector = "a[playlistid='" + playlistId + "']";
+	      var anchorToClick =  // the first playlist or the playlist with id = playlistId
+	        (playlistId) ? document.querySelector(selector) : this.playlistcontainerbody.querySelectorAll("a")[0];
+	      if (anchorToClick) anchorToClick.dispatchEvent(e);
+	    }
 	  }
 
-	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody){
+	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody,_playlistForm,_songForm){
 		this.alert = _alert;
-	    this.songscontainerr = _songscontainer;
+	    this.songscontainer = _songscontainer;
 	    this.songscontainerbody = _songscontainerbody;
-
+		this.playlistForm=_playlistForm;
+		this.songForm=_songForm;
 		
 		this.show = function(playlistid){
-			 var self = this;
-	      makeCall("GET", "GetSongs?playlistid=" + playlistid, null,
+			var self = this;
+			
+	      	makeCall("GET", "GetSongs?playlistid=" + playlistid, null,
 	        function(req) {
 	          if (req.readyState == 4) {
 	            var message = req.responseText;
 	            if (req.status == 200) {
 	              var songsToShow = JSON.parse(req.responseText);
-				  if (playlistToShow.length == 0) {
+				  if (songsToShow.length == 0) {
 	               	self.alert.textContent = "No songs in the playlist yet!";
 	                return;
 	              }
 	              self.update(songsToShow);
+				  self.playlistForm.playlistid.value = playlistid;
+				  self.songForm.playlistid.value = playlistid;
 				} else if (req.status == 403) {
                   window.location.href = req.getResponseHeader("Location");
                   window.sessionStorage.removeItem('username');
@@ -102,13 +116,13 @@
 	      );
 	    };
 		this.update = function(arraySongs) {
-	      var  row, datecell, linkcell, anchor;
+	      var  row, linkcell, anchor;
 	      this.songscontainerbody.innerHTML = ""; // empty the table body
 	      // build updated list
 	      var self = this;
 		  row = document.createElement("tr");
-		  self.playlistcontainerbody.appendChild(row);
-	      arraysongs.forEach(function(song) { // self visible here, not this
+		  self.songscontainerbody.appendChild(row);
+	      arraySongs.forEach(function(song) { // self visible here, not this
 	        linkcell = document.createElement("td");
 	        anchor = document.createElement("a");
 	        linkcell.appendChild(anchor);
@@ -123,7 +137,7 @@
 	        anchor.href = "#";
 	        row.appendChild(linkcell);
 	      });
-		  this.playlistcontainer.style.visibility = "visible";
+		  this.songscontainer.style.visibility = "visible";
 		}
 	}
 		
@@ -139,15 +153,15 @@
 	            playlist_title.reportValidity();
 	            valid = false;
 	          }
-
 	        if (valid) {
 	          var self = this;
+			  playlistToReport = this.playlistForm.querySelector("input[type = 'hidden']").value;
 	          makeCall("POST", 'CreatePlaylist', e.target.closest("form"),
 	            function(req) {
 	              if (req.readyState == XMLHttpRequest.DONE) {
 	                var message = req.responseText; // error message or mission id
 	                if (req.status == 200) {
-	                  orchestrator.refresh(); // id of the new mission passed
+	                  orchestrator.refresh(playlistToReport); // id of the new mission passed
 	                } else if (req.status == 403) {
                       window.location.href = req.getResponseHeader("Location");
                       window.sessionStorage.removeItem('username');
@@ -175,6 +189,7 @@
 	    this.registerSong = function(orchestrator) {
 	      // Manage submit button
 	      this.songForm.querySelector("input[type='button'].submit").addEventListener('click', (e) => {
+			var form = e.target.closest("form");
 	        var song_fieldset = e.target.closest("fieldset"),valid = true; 
 	        for (i = 0; i < song_fieldset.elements.length; i++) {
 	          if (!song_fieldset.elements[i].checkValidity()) {
@@ -186,12 +201,13 @@
 
 	        if (valid) {
 	          var self = this;
+			  playlistToReport = form.querySelector("input[type = 'hidden']").value;
 	          makeCall("POST", 'CreateSong', e.target.closest("form"),
 	            function(req) {
 	              if (req.readyState == XMLHttpRequest.DONE) {
 	                var message = req.responseText; // error message or mission id
 	                if (req.status == 200) {
-	                  orchestrator.refresh(); // id of the new mission passed
+	                  orchestrator.refresh(playlistToReport); // id of the new mission passed
 	                } else if (req.status == 403) {
                       window.location.href = req.getResponseHeader("Location");
                       window.sessionStorage.removeItem('username');
@@ -222,9 +238,11 @@
 	        document.getElementById("id_playlistcontainerbody"));
 		  
 		  playlistDetails = new PlaylistDetails(
-			alertcontainer,
+			alertContainer,
 			document.getElementById("id_songscontainer"),
-			document.getElementById("id_songscontainerbody"));
+			document.getElementById("id_songscontainerbody"),
+			document.getElementById("id_createplaylistform"),
+			document.getElementById("id_createsongform"));
 
 		  playlistForm = new PlaylistForm(document.getElementById("id_createplaylistform"), alertContainer);
 	      playlistForm.registerPlaylist(this);  // the orchestrator passes itself --this-- so that the playlistForm can call its refresh function after creating a mission
@@ -232,10 +250,13 @@
 		  songForm = new SongForm(document.getElementById("id_createsongform"), alertContainer);
 		  songForm.registerSong(this);
 
-		this.refresh = function() {
+		this.refresh = function(currentPlaylist) {
 	      alertContainer.textContent = "";        // not null after creation of status change
-	      playlistList.show();
-		  playlistDetails.show();
+	      playlistList.show(function() {
+	        playlistList.autoclick(currentPlaylist); 
+	      }); // closure preserves visibility of this);
+
+		  //TODO playlistDetails.reset();
 		  playlistForm.reset();
 		  songForm.reset(); //CONTROLLARE SE ANCHE SENZA I RESET I VALORI VENGO AZZERATI
 	  	};

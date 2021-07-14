@@ -31,3 +31,7 @@ TIW-MusicPlaylist-PureHtml/WebContent/WEB-INF/web.xml
 TIW-MusicPlaylist-PureHtml/WebContent/WEB-INF/web.xml
 TIW-MusicPlaylist-PureHtml/WebContent/WEB-INF/web.xml
 TIW-MusicPlaylist-PureHtml/WebContent/WEB-INF/web.xml
+TIW-MusicPlaylist-RIA/WebContent/WEB-INF/web.xml
+*.xml
+TIW-MusicPlaylist-PureHtml/WebContent/WEB-INF/web.xml
+*.xml
