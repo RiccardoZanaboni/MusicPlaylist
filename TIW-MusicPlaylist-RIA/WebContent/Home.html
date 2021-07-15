@@ -6,6 +6,7 @@
 <link rel="stylesheet" type="text/css" media="all" href="CSS/HomeStyle.css" />
 <script src="utils.js" charset="utf-8" defer></script>
 <script src="homeManagement.js" charset="utf-8" defer></script>
+<script src="d&d.js" charset="utf-8" defer></script>
 </head>
 <body>
 <h1>List of your Playlists</h1>
@@ -25,13 +26,17 @@
 	<div id="songscontainer" class="show">
 		<div id="songs_table">
 		<table id="id_songscontainer">
-			<tbody id="id_songscontainerbody">
+			<thead>
 				<tr>
-					<td>
+					<th>SONG-TITLE</th>
+			</thead>
+				<tbody id="id_songscontainerbody">
+					<tr>
+						<td>
 
-					</td>
-				</tr>
-			</tbody>
+						</td>
+					</tr>
+				</tbody>
 		</table>
 		</div>
 	</div>
@@ -39,6 +44,11 @@
 		<div  id="leftbutton">
 			<form action="#">
 				<input class="buttons" type="button" name="submit" value="PRECEDENTI">
+			</form>
+		</div>
+		<div  id="reorderbutton">
+			<form id="id_reorderbutton"action="#">
+				<input type="button" value="RIORDINO" name="submit" class="submit">
 			</form>
 		</div>
 		<div id="rightbutton">

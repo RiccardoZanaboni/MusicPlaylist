@@ -1,7 +1,7 @@
 { // avoid variables ending up in the global scope
 
 	  // page components
-	  let playlistList,playlistDetails,playlistForm,songForm
+	  let playlistList,playlistDetails,playlistForm,songForm,
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 
 	  window.addEventListener("load", () => {
@@ -103,6 +103,7 @@
 	                return;
 	              }
 	              self.update(songsToShow);
+				  self.alert.textContent="";
 				  self.playlistForm.playlistid.value = playlistid;
 				  self.songForm.playlistid.value = playlistid;
 				} else if (req.status == 403) {
@@ -120,10 +121,9 @@
 	      this.songscontainerbody.innerHTML = ""; // empty the table body
 	      // build updated list
 	      var self = this;
-		  row = document.createElement("tr");
-		  self.songscontainerbody.appendChild(row);
 	      arraySongs.forEach(function(song) { // self visible here, not this
-	        linkcell = document.createElement("td");
+	        row = document.createElement("tr");
+			linkcell = document.createElement("td");
 	        anchor = document.createElement("a");
 	        linkcell.appendChild(anchor);
 	        linkText = document.createTextNode(song.title);
@@ -136,6 +136,8 @@
 	        //}, false);
 	        anchor.href = "#";
 	        row.appendChild(linkcell);
+			row.className="draggable";
+			self.songscontainerbody.appendChild(row);
 	      });
 		  this.songscontainer.style.visibility = "visible";
 		}

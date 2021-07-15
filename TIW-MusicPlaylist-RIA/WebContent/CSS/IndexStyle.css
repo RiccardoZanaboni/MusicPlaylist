@@ -46,6 +46,7 @@ label{
 	width: 345px;
 	background-color: whitesmoke;
 	transition-duration: 0.3s;
+	cursor : pointer;
 }
 
 #login_button:hover{

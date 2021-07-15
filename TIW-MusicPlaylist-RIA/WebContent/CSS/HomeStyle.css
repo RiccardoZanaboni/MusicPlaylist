@@ -9,6 +9,7 @@ h1{
 .show{
 	display : inline-block;
 }
+
 #playlistlist{
 	float : left;
 }
@@ -19,10 +20,18 @@ h1{
 
 #leftbutton{
 	float : left;
+	padding: 20px;
+	
+}
+
+#reorderbutton{
+	float : left;
+    padding: 20px;	
 }
 
 #rightbutton{
-	float : right;
+	float : left;
+    padding: 20px;	
 }
 
 
@@ -53,6 +62,10 @@ table{
     border-radius: 15px;
 }
 
+#id_songscontainer{
+    padding-left: 250px;
+}
+
 input{
     border: 3px #ccc;
   	outline: none;
@@ -70,7 +83,7 @@ input[type="file"]{
 input[type="button"]{
     margin-top: 20px;
     padding-bottom: 40px;
-    
+    cursor : pointer;
 }
 
 thead,th,td,tr{
@@ -82,3 +95,17 @@ thead,th,td,tr{
 #id_alert{
 color:white;
 }
+
+.selected{
+	color : red;
+}
+
+.notselected{
+	color : black;
+}
+a{
+	color : black;
+}
+
+
+
