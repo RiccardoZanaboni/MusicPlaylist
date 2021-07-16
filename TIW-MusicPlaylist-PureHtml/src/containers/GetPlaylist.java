@@ -104,7 +104,7 @@ public class GetPlaylist extends HttpServlet {
 		int userId = u.getId();
 		try {
 			songs = sDao.findSongByPlaylistId(playlistId);
-			songsOfUser = sDao.findSongByUserId(userId);
+			songsOfUser = sDao.findSongByUserId(userId,playlistId);
 		}catch(SQLException e) {
 			System.out.println(e);
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's songs extraction");

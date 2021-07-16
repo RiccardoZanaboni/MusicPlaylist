@@ -22,7 +22,7 @@ public class SongDAO {
 	
 	public List<Song> findSongByPlaylistId(int playlistId) throws SQLException{
 		List<Song> songs = new ArrayList<Song>();
-		String query = "SELECT id, title, image FROM song where playlist = ?";
+		String query = "SELECT id, title, image FROM song join association on songid where playlistid=?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, playlistId);
 			Blob image_blob = null;
@@ -38,14 +38,6 @@ public class SongDAO {
 					byte[] img64 =  Base64.getEncoder().encode(ba);
 					String image = new String(img64);
 					song.setImage(image);
-	
-					//song.setSinger(result.getString("singer"));
-					//song.setRelease_date(result.getDate("release_date"));
-					//song.setMusical_genre(result.getString("musical_genre"));
-					
-					//file_blob= result.getBlob("file");
-					//InputStream file= file_blob.getBinaryStream();	
-					//song.setFile(file);
 					songs.add(song);
 				}
 			}
@@ -85,11 +77,12 @@ public class SongDAO {
 	
 	
 	
-	public List<Song> findSongByUserId(int creatorid) throws SQLException{
+	public List<Song> findSongByUserId(int creatorid, int playlistid) throws SQLException{
 		List<Song> songs = new ArrayList<Song>();
-		String query = "SELECT id,title FROM song where creator = ? AND playlist IS NULL";
+		String query = "SELECT id,title FROM song where creator = ? and id not in (select songid from association where playlistid = ?) ";
 		try(PreparedStatement pstatement = con.prepareStatement(query);){
 			pstatement.setInt(1, creatorid);
+			pstatement.setInt(2, playlistid);
 			try(ResultSet result = pstatement.executeQuery();){
 				while(result.next()) {
 					Song song = new Song();
@@ -104,14 +97,13 @@ public class SongDAO {
 	
 	
 	
-	public int setPlaylistId(int playlistid, int songid) throws SQLException {
-		String query = "UPDATE song SET playlist = ? WHERE id = ?";
-		int code = 0;
+	public void setPlaylistId(int playlistid, int songid) throws SQLException {
+		String query = "INSERT into association (songid,playlistid) values (?,?)";
 		PreparedStatement pStatement = null;
 		try{
 			pStatement = con.prepareStatement(query);
-			pStatement.setInt(1, playlistid);
-			pStatement.setInt(2, songid);
+			pStatement.setInt(1, songid);
+			pStatement.setInt(2, playlistid);
 			pStatement.executeUpdate();
 			
 		}catch(SQLException e) {
@@ -126,7 +118,6 @@ public class SongDAO {
 
 			}
 		}
-		return code;
 	}
 	
 	public Song findSongById(int songId) throws SQLException{
