@@ -17,11 +17,17 @@ CREATE TABLE `song`
 `singer` varchar(45) NOT NULL,
 `release_date` date NOT NULL,
 `musical_genre` varchar(45) NOT NULL,
-`file` LONGBLOB NULL,  
-`creator` int(11) NOT NULL,
-`playlist` int(11) NOT NULL,    
+`file` LONGBLOB NOT NULL,  
+`creator` int(11) NOT NULL,    
 PRIMARY KEY (`id`),  
-CONSTRAINT `id_user` FOREIGN KEY (`creator`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-CONSTRAINT `id_playlist` FOREIGN KEY (`playlist`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
+CONSTRAINT `id_user` FOREIGN KEY (`creator`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE);
 
 
+CREATE TABLE `association` 
+(  
+`songid` int(11) NOT NULL,
+`playlistid` int(11) NOT NULL,
+`order` int(11),
+PRIMARY KEY (`songid`, `playlistid`),  
+CONSTRAINT `id_song` FOREIGN KEY (`songid`) REFERENCES `song` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+CONSTRAINT `id_playlist` FOREIGN KEY (`playlistid`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
