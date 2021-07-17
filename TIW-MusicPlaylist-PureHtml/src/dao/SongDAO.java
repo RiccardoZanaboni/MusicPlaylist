@@ -22,7 +22,7 @@ public class SongDAO {
 	
 	public List<Song> findSongByPlaylistId(int playlistId) throws SQLException{
 		List<Song> songs = new ArrayList<Song>();
-		String query = "SELECT id, title, image FROM song join association on songid where playlistid=?";
+		String query = "SELECT id, title, image FROM song join association on songid=id where playlistid=?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, playlistId);
 			Blob image_blob = null;

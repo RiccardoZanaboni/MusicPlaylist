@@ -1,8 +1,12 @@
 (function(){
-	let reorderButton;
+	
 	window.addEventListener("load", () => {
 		reorderButton = document.getElementById("id_reorderbutton");
+		saveButton = document.getElementById("id_savebutton");
+		saveButton.style.visibility = "hidden";
 		reorderButton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
+			reorderButton.style.visibility = "hidden";
+			saveButton.style.visibility = "visible";
 			var elements = document.getElementsByClassName("draggable")
 			for (let i = elements.length - 1; i >= 0; i--){
 				elements[i].draggable=true;
@@ -11,6 +15,7 @@
 				elements[i].addEventListener("dragleave",dragLeave);
 				elements[i].addEventListener("drop",drop);
 			}
+		},false);
 	},false);
 	
 	let startElement;
@@ -48,6 +53,6 @@
 			startElement.parentElement.insertBefore(startElement , rowsArray[indexDest]);			
 		unselectRows(rowsArray);
 	}
-	})
+
 		
 })();

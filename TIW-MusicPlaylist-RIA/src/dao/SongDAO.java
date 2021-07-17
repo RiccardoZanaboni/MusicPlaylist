@@ -22,7 +22,7 @@ public class SongDAO {
 	
 	public List<Song> findSongByPlaylistId(int playlistId) throws SQLException{
 		List<Song> songs = new ArrayList<Song>();
-		String query = "SELECT id, title, image FROM song join association on songid where playlistid=?";
+		String query = "SELECT id, title, image FROM song join association on songid=id where playlistid=?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, playlistId);
 			Blob image_blob = null;
@@ -152,4 +152,31 @@ public class SongDAO {
 		}
 		return song;
 	}
+	
+	public void setOrder(int[] Ids,int playlistid) throws SQLException {
+		String query = "UPDATE association SET ordering = ? WHERE songid = ? AND playlistid= ? ";
+		PreparedStatement pStatement = null;
+		try {
+			pStatement = con.prepareStatement(query);
+			for(int i=0; i<Ids.length; i++) {
+				pStatement.setInt(1, i);
+				pStatement.setInt(2, Ids[i]);
+				pStatement.setInt(3, playlistid);
+				pStatement.executeUpdate();
+			}
+		}catch(SQLException e) {
+			System.out.println(e);
+			throw new SQLException(e);
+		}finally {
+			try {
+				if (pStatement != null) {
+					pStatement.close();
+				}
+			} catch (Exception e1) {
+
+			}		
+		}
+		
+	}
+	
 }

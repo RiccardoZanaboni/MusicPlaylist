@@ -1,16 +1,42 @@
 { // avoid variables ending up in the global scope
 
 	  // page components
-	  let playlistList,playlistDetails,playlistForm,songForm,
+	  let playlistList,playlistDetails,playlistForm,songForm,reorderButton,saveButton,
 	    pageOrchestrator = new PageOrchestrator(); // main controller
-
+	  reorderButton = document.getElementById("id_reorderbutton");
+	  saveButton = document.getElementById("id_savebutton");
 	  window.addEventListener("load", () => {
 	    if (sessionStorage.getItem("username") == null) {
 	      window.location.href = "index.html";
 	    } else {
 	      pageOrchestrator.start(); // initialize the components
 	      pageOrchestrator.refresh();
-	    }
+		}
+		  saveButton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
+			saveButton.style.visibility = "hidden";			
+			reorderButton.style.visibility = "visible";
+			var orderArray = Array.from(document.getElementById("id_songscontainerbody").querySelectorAll('tbody > tr > td > a'));
+			var arrayId = [];
+			for (let i = 0; i <orderArray.length; i++) {
+   			arrayId.push(orderArray[i].getAttribute("songid"));
+			}
+			makeCall("POST", "AddOrder?playlistId="+this.saveButton.querySelector("input[type = 'hidden']").value+"&arrayId="+arrayId, null,
+	            function(req) {
+	              if (req.readyState == XMLHttpRequest.DONE) {
+	                var message = req.responseText; 
+	                if (req.status == 200) {
+	                  playlistDetails.show(this.saveButton.querySelector("input[type = 'hidden']").value); 
+	                } else if (req.status == 403) {
+                      window.location.href = req.getResponseHeader("Location");
+                      window.sessionStorage.removeItem('username');
+                  }
+                  else {
+	                  document.getElementById("id_alert").textContent = message;
+	                }
+	              }
+	            }
+	          );
+	  	  },false);
 	  }, false);
 
 	function PlaylistList(_alert, _playlistcontainer, _playlistcontainerbody) {
@@ -86,12 +112,12 @@
 		this.alert = _alert;
 	    this.songscontainer = _songscontainer;
 	    this.songscontainerbody = _songscontainerbody;
-		this.playlistForm=_playlistForm;
-		this.songForm=_songForm;
+		this.playlistForm = _playlistForm;
+		this.songForm = _songForm;
+		this.saveButton = document.getElementById("id_savebutton");
 		
 		this.show = function(playlistid){
 			var self = this;
-			
 	      	makeCall("GET", "GetSongs?playlistid=" + playlistid, null,
 	        function(req) {
 	          if (req.readyState == 4) {
@@ -106,6 +132,7 @@
 				  self.alert.textContent="";
 				  self.playlistForm.playlistid.value = playlistid;
 				  self.songForm.playlistid.value = playlistid;
+				  self.saveButton.playlistid.value = playlistid;
 				} else if (req.status == 403) {
                   window.location.href = req.getResponseHeader("Location");
                   window.sessionStorage.removeItem('username');
