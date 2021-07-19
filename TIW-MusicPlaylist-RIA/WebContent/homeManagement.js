@@ -1,10 +1,11 @@
 { // avoid variables ending up in the global scope
 
 	  // page components
-	  let playlistList,playlistDetails,playlistForm,songForm,reorderButton,saveButton,
+	  let playlistList,playlistDetails,playlistForm,songForm,reorderButton,saveButton
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 	  reorderButton = document.getElementById("id_reorderbutton");
-	  saveButton = document.getElementById("id_savebutton");
+	  saveButton = document.getElementById("id_savebutton"); 
+	  eventListenerPresence = false;	
 	  window.addEventListener("load", () => {
 	    if (sessionStorage.getItem("username") == null) {
 	      window.location.href = "index.html";
@@ -115,9 +116,12 @@
 		this.playlistForm = _playlistForm;
 		this.songForm = _songForm;
 		this.saveButton = document.getElementById("id_savebutton");
+		let leftbutton = document.getElementById("id_leftbutton");
+	    let rightbutton = document.getElementById("id_rightbutton");
 		
 		this.show = function(playlistid){
 			var self = this;
+			var startingsongid = 0;
 	      	makeCall("GET", "GetSongs?playlistid=" + playlistid, null,
 	        function(req) {
 	          if (req.readyState == 4) {
@@ -128,7 +132,8 @@
 	               	self.alert.textContent = "No songs in the playlist yet!";
 	                return;
 	              }
-	              self.update(songsToShow);
+				  var songsDivided = self.songsDivision(songsToShow, startingsongid);
+	              self.update(songsDivided, startingsongid);
 				  self.alert.textContent="";
 				  self.playlistForm.playlistid.value = playlistid;
 				  self.songForm.playlistid.value = playlistid;
@@ -143,12 +148,15 @@
 	        }
 	      );
 	    };
-		this.update = function(arraySongs) {
+		this.update = function(arraySongs, index) {
 	      var  row, linkcell, anchor;
 	      this.songscontainerbody.innerHTML = ""; // empty the table body
 	      // build updated list
 	      var self = this;
-	      arraySongs.forEach(function(song) { // self visible here, not this
+		  if(eventListenerPresence){
+			this.leftbutton.removeEventListner('click');
+		}
+	      arraySongs[index].forEach(function(song) { // self visible here, not this
 	        row = document.createElement("tr");
 			linkcell = document.createElement("td");
 	        anchor = document.createElement("a");
@@ -157,17 +165,53 @@
 	        anchor.appendChild(linkText);
 	        //anchor.songid = song.id; // make list item clickable
 	        anchor.setAttribute('songid', song.id); // set a custom HTML attribute
-	        //anchor.addEventListener("click", (e) => {  
-	          // dependency via module parameter
-	          //playlistDetails.show(e.target.getAttribute("playlistid")); // the list must know the details container
-	        //}, false);
 	        anchor.href = "#";
 	        row.appendChild(linkcell);
 			row.className="draggable";
 			self.songscontainerbody.appendChild(row);
 	      });
+		  if(arraySongs[index+1] != undefined){
+			rightbutton.style.visibility = "visible";
+			rightbutton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
+			  this.update(arraySongs, index+1);
+		  }, false);
+		}else{
+			rightbutton.style.visibility = "hidden";
+		}
+		
+		if(arraySongs[index-1] != undefined){
+			leftbutton.style.visibility = "visible";
+			leftbutton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
+			  this.update(arraySongs, index-1);
+		  }, false);
+		}else{
+			leftbutton.style.visibility = "hidden";
+		}
+		
 		  this.songscontainer.style.visibility = "visible";
 		}
+		
+		this.songsDivision = function(arraySongs, startingindex){
+			var endindex;
+			var arraySize = arraySongs.length;
+			var iterations = Math.ceil(arraySize/5);
+			var temporaryArray = [], arraySongsDivided = [];
+			for (let i = 0; i < iterations; i++){
+				if((arraySize - startingindex) >= 5){
+					endindex = 5;
+				}else{
+					endindex = startingindex+(arraySize - startingindex);
+				}
+				for(let k = startingindex; k < endindex; k++){
+					temporaryArray.push(arraySongs[k]);
+				}
+				arraySongsDivided.push(temporaryArray);
+				startingindex = endindex;
+				temporaryArray = [];
+			}
+			return arraySongsDivided;
+		}
+		
 	}
 		
 	function PlaylistForm(playlistId, alert) {
