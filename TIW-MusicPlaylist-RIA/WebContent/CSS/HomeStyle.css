@@ -120,4 +120,13 @@ color:white;
 	cursor : move;
 }
 
+img{
+	width : 90px;
+	height : 90px;
+	padding : 10px;
+	border-radius: 15px;
+}
+
+
+
 

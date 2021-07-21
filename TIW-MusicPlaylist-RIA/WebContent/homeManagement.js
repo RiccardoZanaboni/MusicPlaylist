@@ -185,8 +185,13 @@
 		  }
 	      arraySongs[index].forEach(function(song) { // self visible here, not this
 			linkcell = document.createElement("td");
+			imgDiv=document.createElement("div");
+			img = document.createElement("img");
+			imgDiv.appendChild(img);
+			img.setAttribute('src',"data:image/png;base64,"+song.image);
 	        anchor = document.createElement("a");
 	        linkcell.appendChild(anchor);
+	        linkcell.appendChild(imgDiv);
 	        linkText = document.createTextNode(song.title);
 	        anchor.appendChild(linkText);
 	        //anchor.songid = song.id; // make list item clickable
