@@ -5,6 +5,8 @@
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 	  reorderButton = document.getElementById("id_reorderbutton");
 	  saveButton = document.getElementById("id_savebutton"); 
+	  orderList = document.getElementById("songscontainerorder");
+      songList = document.getElementById("songscontainer");
 	  eventListenerPresence = false;	
 	  window.addEventListener("load", () => {
 	    if (sessionStorage.getItem("username") == null) {
@@ -14,9 +16,7 @@
 	      pageOrchestrator.refresh();
 		}
 		  saveButton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
-			saveButton.style.visibility = "hidden";			
-			reorderButton.style.visibility = "visible";
-			var orderArray = Array.from(document.getElementById("id_songscontainerbody").querySelectorAll('tbody > tr > td > a'));
+			var orderArray = Array.from(document.getElementById("id_songsorderbody").querySelectorAll('tbody > tr > td'));
 			var arrayId = [];
 			for (let i = 0; i <orderArray.length; i++) {
    			arrayId.push(orderArray[i].getAttribute("songid"));
@@ -26,7 +26,7 @@
 	              if (req.readyState == XMLHttpRequest.DONE) {
 	                var message = req.responseText; 
 	                if (req.status == 200) {
-	                  playlistDetails.show(this.saveButton.querySelector("input[type = 'hidden']").value); 
+	                  playlistDetails.show(this.saveButton.querySelector("input[type = 'hidden']").value);
 	                } else if (req.status == 403) {
                       window.location.href = req.getResponseHeader("Location");
                       window.sessionStorage.removeItem('username');
@@ -109,15 +109,18 @@
 	    }
 	  }
 
-	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody,_playlistForm,_songForm){
+	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody,  _songsorderdiv,  _songsorderbody, _playlistForm,_songForm){
 		this.alert = _alert;
 	    this.songscontainer = _songscontainer;
 	    this.songscontainerbody = _songscontainerbody;
+		this.songsorderdiv = _songsorderdiv;
+	    this.songsorderbody = _songsorderbody;
 		this.playlistForm = _playlistForm;
 		this.songForm = _songForm;
+		this.reorderButton = document.getElementById("id_reorderbutton");
 		this.saveButton = document.getElementById("id_savebutton");
-		let leftbutton = document.getElementById("id_leftbutton");
-	    let rightbutton = document.getElementById("id_rightbutton");
+		this.leftbutton = document.getElementById("id_leftbutton");
+	    this.rightbutton = document.getElementById("id_rightbutton");
 		
 		this.show = function(playlistid){
 			var self = this;
@@ -129,11 +132,18 @@
 	            if (req.status == 200) {
 	              var songsToShow = JSON.parse(req.responseText);
 				  if (songsToShow.length == 0) {
+					reorderButton.style.display = "none";
+					saveButton.style.display = "none";
+					leftbutton.style.visibility = "hidden";
+					rightbutton.style.visibility = "hidden";
+					self.songsorderdiv.style.display = "none";
+					self.songscontainer.style.display = "none";	
 	               	self.alert.textContent = "No songs in the playlist yet!";
 	                return;
 	              }
 				  var songsDivided = self.songsDivision(songsToShow, startingsongid);
 	              self.update(songsDivided, startingsongid);
+				  self.updateOrder(songsToShow);
 				  self.alert.textContent="";
 				  self.playlistForm.playlistid.value = playlistid;
 				  self.songForm.playlistid.value = playlistid;
@@ -148,16 +158,32 @@
 	        }
 	      );
 	    };
-		this.update = function(arraySongs, index) {
-	      var  row, linkcell, anchor;
+		this.updateOrder = function(arraySongs) {
+	      var  row;
+	      this.songsorderbody.innerHTML = ""; // empty the table body
+	      // build updated list
+	      var self = this;
+	      arraySongs.forEach(function(song) { // self visible here, not this
+	        row = document.createElement("tr");
+			cell = document.createElement("td");
+	        cell.textContent = song.title;
+			cell.setAttribute('songid', song.id);
+	        row.appendChild(cell);
+			row.className="draggable";
+			self.songsorderbody.appendChild(row);
+	      });
+		  this.songsorderdiv.style.display = "none";
+		}
+		
+		this.update = function(arraySongs, index) {	
+	      let row= document.createElement("tr"), linkcell, anchor;
 	      this.songscontainerbody.innerHTML = ""; // empty the table body
 	      // build updated list
 	      var self = this;
 		  if(eventListenerPresence){
 			this.leftbutton.removeEventListner('click');
-		}
+		  }
 	      arraySongs[index].forEach(function(song) { // self visible here, not this
-	        row = document.createElement("tr");
 			linkcell = document.createElement("td");
 	        anchor = document.createElement("a");
 	        linkcell.appendChild(anchor);
@@ -167,40 +193,43 @@
 	        anchor.setAttribute('songid', song.id); // set a custom HTML attribute
 	        anchor.href = "#";
 	        row.appendChild(linkcell);
-			row.className="draggable";
-			self.songscontainerbody.appendChild(row);
 	      });
+	      self.saveButton.style.display = "none";	
+		  self.songscontainerbody.appendChild(row);
+		  this.songscontainer.style.display = "block";	
+		  self.reorderButton.style.display = "block";
 		  if(arraySongs[index+1] != undefined){
 			rightbutton.style.visibility = "visible";
+			rightbutton.style.display = "block";
 			rightbutton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
 			  this.update(arraySongs, index+1);
-		  }, false);
-		}else{
+		    }, false);
+		  }else{
 			rightbutton.style.visibility = "hidden";
-		}
-		
-		if(arraySongs[index-1] != undefined){
+			rightbutton.style.display = "block";
+		  }
+		  if(arraySongs[index-1] != undefined){
 			leftbutton.style.visibility = "visible";
+			leftbutton.style.display = "block";
 			leftbutton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
 			  this.update(arraySongs, index-1);
-		  }, false);
-		}else{
+		    }, false);
+		  }else{
 			leftbutton.style.visibility = "hidden";
-		}
-		
-		  this.songscontainer.style.visibility = "visible";
+			leftbutton.style.display = "block";
+		  }
 		}
 		
 		this.songsDivision = function(arraySongs, startingindex){
-			var endindex;
+			var endindex=0;
 			var arraySize = arraySongs.length;
 			var iterations = Math.ceil(arraySize/5);
 			var temporaryArray = [], arraySongsDivided = [];
 			for (let i = 0; i < iterations; i++){
 				if((arraySize - startingindex) >= 5){
-					endindex = 5;
+					endindex += 5;
 				}else{
-					endindex = startingindex+(arraySize - startingindex);
+					endindex += arraySize - startingindex;
 				}
 				for(let k = startingindex; k < endindex; k++){
 					temporaryArray.push(arraySongs[k]);
@@ -312,8 +341,10 @@
 		  
 		  playlistDetails = new PlaylistDetails(
 			alertContainer,
-			document.getElementById("id_songscontainer"),
+			document.getElementById("songscontainer"),
 			document.getElementById("id_songscontainerbody"),
+			document.getElementById("songscontainerorder"),
+			document.getElementById("id_songsorderbody"),
 			document.getElementById("id_createplaylistform"),
 			document.getElementById("id_createsongform"));
 

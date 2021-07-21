@@ -22,7 +22,7 @@ public class PlaylistDAO{
 	//Metodo per il recupero di tutte le playlist di un determinato utente dal db
 	public List<Playlist> findPlaylistByUser(int creatorid) throws SQLException{
 		List<Playlist> playlists = new ArrayList<Playlist>();
-		String query = "SELECT id, title, creation_date FROM playlist where creator = ?";
+		String query = "SELECT id, title, creation_date FROM playlist where creator = ? order by creation_date desc";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, creatorid);
 			try (ResultSet result = pstatement.executeQuery();) {

@@ -26,16 +26,24 @@
 	<div id="songscontainer" class="show">
 		<div id="songs_table">
 		<table id="id_songscontainer">
+				<tbody id="id_songscontainerbody">
+				</tbody>
+		</table>
+		</div>
+	</div>
+	<div id="songscontainerorder" class="show">
+		<div  id="savebutton">
+			<form id="id_savebutton"action="#">
+				<input type="button" value="SAVE" name="submit" class="submit">
+				<input type="hidden" name="playlistid">
+			</form>
+		</div>
+		<div id="songs_tableorder">
+		<table id="id_songsorder">
 			<thead>
-				<tr>
 					<th>SONG-TITLE</th>
 			</thead>
-				<tbody id="id_songscontainerbody">
-					<tr>
-						<td>
-
-						</td>
-					</tr>
+				<tbody id="id_songsorderbody">
 				</tbody>
 		</table>
 		</div>
@@ -49,12 +57,6 @@
 		<div  id="reorderbutton">
 			<form id="id_reorderbutton"action="#">
 				<input type="button" value="RIORDINO" name="submit" class="submit"> 
-			</form>
-		</div>
-		<div  id="savebutton">
-			<form id="id_savebutton"action="#">
-				<input type="button" value="SAVE" name="submit" class="submit">
-				<input type="hidden" name="playlistid">
 			</form>
 		</div>
 		<div id="rightbutton">

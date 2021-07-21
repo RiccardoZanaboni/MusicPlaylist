@@ -16,12 +16,12 @@ h1{
 
 #maincontainer{
 	height : 500px;
+	padding : 10px
 }
 
 #leftbutton{
 	float : left;
 	padding: 20px;
-	
 }
 
 #reorderbutton{
@@ -34,6 +34,11 @@ h1{
     padding: 20px;	
 }
 
+#savebutton{
+	float : right;
+	padding-right: 200px;
+	padding-top: 120px;
+}
 
 table{
     text-align: center;
@@ -63,8 +68,15 @@ table{
 }
 
 #id_songscontainer{
-    padding-left: 250px;
+	padding-top: 25px;
+    padding-left: 30px;
 }
+
+#id_songsorder{
+    padding-left : 100px;
+    padding-bottom: 30px;
+}
+
 
 input{
     border: 3px #ccc;
@@ -103,9 +115,9 @@ color:white;
 .notselected{
 	color : black;
 }
-a{
-	color : black;
-}
 
+#id_songsorderbody{
+	cursor : move;
+}
 
 
