@@ -1,7 +1,7 @@
 { // avoid variables ending up in the global scope
 
 	  // page components
-	  let playlistList,playlistDetails,playlistForm,songForm,reorderButton,saveButton
+	  let playlistList,playlistDetails,playlistForm,songForm,songDetails,reorderButton,saveButton,
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 	  reorderButton = document.getElementById("id_reorderbutton");
 	  saveButton = document.getElementById("id_savebutton"); 
@@ -109,7 +109,7 @@
 	    }
 	  }
 
-	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody,  _songsorderdiv,  _songsorderbody, _playlistForm,_songForm){
+	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody,  _songsorderdiv,  _songsorderbody, _playlistForm, _songForm,_playerContainer ){
 		this.alert = _alert;
 	    this.songscontainer = _songscontainer;
 	    this.songscontainerbody = _songscontainerbody;
@@ -117,12 +117,16 @@
 	    this.songsorderbody = _songsorderbody;
 		this.playlistForm = _playlistForm;
 		this.songForm = _songForm;
+		this.playerContainer = _playerContainer;
 		this.reorderButton = document.getElementById("id_reorderbutton");
 		this.saveButton = document.getElementById("id_savebutton");
 		this.leftbutton = document.getElementById("id_leftbutton");
 	    this.rightbutton = document.getElementById("id_rightbutton");
 		
-		this.show = function(playlistid){
+		this.show = function(playlistid,next){
+			next=function() {
+	        playlistDetails.autoclick();
+	      };
 			var self = this;
 			var startingsongid = 0;
 	      	makeCall("GET", "GetSongs?playlistid=" + playlistid, null,
@@ -137,7 +141,8 @@
 					leftbutton.style.visibility = "hidden";
 					rightbutton.style.visibility = "hidden";
 					self.songsorderdiv.style.display = "none";
-					self.songscontainer.style.display = "none";	
+					self.songscontainer.style.display = "none";
+					self.playerContainer.style.display = "none";	
 	               	self.alert.textContent = "No songs in the playlist yet!";
 	                return;
 	              }
@@ -148,6 +153,7 @@
 				  self.playlistForm.playlistid.value = playlistid;
 				  self.songForm.playlistid.value = playlistid;
 				  self.saveButton.playlistid.value = playlistid;
+				  if (next) next();
 				} else if (req.status == 403) {
                   window.location.href = req.getResponseHeader("Location");
                   window.sessionStorage.removeItem('username');
@@ -193,9 +199,14 @@
 	        linkcell.appendChild(anchor);
 	        linkcell.appendChild(imgDiv);
 	        linkText = document.createTextNode(song.title);
+		    
 	        anchor.appendChild(linkText);
 	        //anchor.songid = song.id; // make list item clickable
 	        anchor.setAttribute('songid', song.id); // set a custom HTML attribute
+            anchor.addEventListener("click", (e) => {  
+	          // dependency via module parameter
+	          songDetails.show(e.target.getAttribute("songid")); // the list must know the details container
+	        }, false);
 	        anchor.href = "#";
 	        row.appendChild(linkcell);
 	      });
@@ -245,8 +256,66 @@
 			}
 			return arraySongsDivided;
 		}
+		this.autoclick = function() {
+		  var e = new Event("click");	
+	      var anchorToClick =   this.songscontainerbody.querySelectorAll("a")[0];
+	      if (anchorToClick) anchorToClick.dispatchEvent(e);
+	    }
 		
 	}
+	function SongDetails(_alert, _playercontainer) {
+	    this.alert = _alert;
+	    this.playercontainer = _playercontainer;
+
+	    this.show = function(songid) {
+	      var self = this;
+	      makeCall("GET", "GetSongDetails?songId="+songid, null,
+	        function(req) {
+	          if (req.readyState == 4) {
+	            var message = req.responseText;
+	            if (req.status == 200) {
+	              var songDetailsToShow = JSON.parse(req.responseText);
+	              if (songDetailsToShow == null) {
+	                self.alert.textContent = "Song is null";
+	                return;
+	              }
+	              self.update(songDetailsToShow); // self visible by closure
+	          } else if (req.status == 403) {
+                  window.location.href = req.getResponseHeader("Location");
+                  window.sessionStorage.removeItem('username');
+                  }
+                  else {
+	            self.alert.textContent = message;
+	          }}
+	        }
+	      );
+	    };
+		this.update = function(songDetailsToShow) {
+	      this.playercontainer.innerHTML = ""; // empty the div body
+	      // build updated song
+	        title = document.createElement("h1");
+	   		singer = document.createElement("span");
+	        genre = document.createElement("span");
+			release_date = document.createElement("span");
+			title.className = "title", singer.className = "details",genre.className = "details",release_date.className = "details";
+			singer.id = "singer",genre.id = "genre",release_date.id = "release_date";
+			img = document.createElement("img");
+			img.setAttribute('src',"data:image/png;base64,"+songDetailsToShow.image);
+			img.id = "playerImg";
+			audio = document.createElement("AUDIO");
+			audio.setAttribute('src',"data:audio/mpeg;base64,"+songDetailsToShow.file);
+			audio.setAttribute("controls", "controls");
+	        title.textContent = songDetailsToShow.title;
+			singer.textContent = "Singer : " + songDetailsToShow.singer;
+			genre.textContent = "Genre : " + songDetailsToShow.musical_genre;
+			release_date.textContent = "Release Date : " + songDetailsToShow.release_date;
+			playercontainer.innerHTML+= title.outerHTML + singer.outerHTML + genre.outerHTML + release_date.outerHTML + img.outerHTML + audio.outerHTML;
+			
+	      this.playercontainer.style.display = "block";
+
+	    }
+
+	  }
 		
 	function PlaylistForm(playlistId, alert) {
 	    this.playlistForm = playlistId;
@@ -351,7 +420,13 @@
 			document.getElementById("songscontainerorder"),
 			document.getElementById("id_songsorderbody"),
 			document.getElementById("id_createplaylistform"),
-			document.getElementById("id_createsongform"));
+			document.getElementById("id_createsongform"),
+			document.getElementById("playercontainer"));
+			
+
+		  songDetails = new SongDetails(
+	        alertContainer,
+	        document.getElementById("playercontainer"));
 
 		  playlistForm = new PlaylistForm(document.getElementById("id_createplaylistform"), alertContainer);
 	      playlistForm.registerPlaylist(this);  // the orchestrator passes itself --this-- so that the playlistForm can call its refresh function after creating a mission

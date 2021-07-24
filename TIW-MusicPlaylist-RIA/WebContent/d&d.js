@@ -1,6 +1,7 @@
 (function(){
 	
 	window.addEventListener("load", () => {
+		playerContainer = document.getElementById("playercontainer");
 		reorderButton = document.getElementById("id_reorderbutton");
 		saveButton = document.getElementById("id_savebutton");
 		orderList = document.getElementById("songscontainerorder");
@@ -9,6 +10,7 @@
 		this.leftbutton = document.getElementById("id_leftbutton");
 	    this.rightbutton = document.getElementById("id_rightbutton");
 		reorderButton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
+			playerContainer.style.display = "none";
 			list.style.display = "none";
 			orderList.style.display = "block";
 			reorderButton.style.display = "none";
