@@ -27,7 +27,7 @@ CREATE TABLE `association`
 (  
 `songid` int(11) NOT NULL,
 `playlistid` int(11) NOT NULL,
-`order` int(11),
+`ordering` int(11),
 PRIMARY KEY (`songid`, `playlistid`),  
 CONSTRAINT `id_song` FOREIGN KEY (`songid`) REFERENCES `song` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
 CONSTRAINT `id_playlist` FOREIGN KEY (`playlistid`) REFERENCES `playlist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE)
