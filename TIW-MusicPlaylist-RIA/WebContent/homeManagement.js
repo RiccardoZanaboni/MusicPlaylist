@@ -1,7 +1,7 @@
 { // avoid variables ending up in the global scope
 
 	  // page components
-	  let playlistList,playlistDetails,playlistForm,songForm,songDetails,reorderButton,saveButton,
+	  let playlistList,playlistDetails,playlistForm,songForm,songDetails,reorderButton,saveButton,addSongForm
 	    pageOrchestrator = new PageOrchestrator(); // main controller
 	  reorderButton = document.getElementById("id_reorderbutton");
 	  saveButton = document.getElementById("id_savebutton"); 
@@ -109,7 +109,7 @@
 	    }
 	  }
 
-	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody,  _songsorderdiv,  _songsorderbody, _playlistForm, _songForm,_playerContainer ){
+	function PlaylistDetails(_alert, _songscontainer, _songscontainerbody,  _songsorderdiv,  _songsorderbody, _playlistForm, _songForm,_playerContainer, _addSongForm ){
 		this.alert = _alert;
 	    this.songscontainer = _songscontainer;
 	    this.songscontainerbody = _songscontainerbody;
@@ -117,6 +117,7 @@
 	    this.songsorderbody = _songsorderbody;
 		this.playlistForm = _playlistForm;
 		this.songForm = _songForm;
+		this.addSongForm = _addSongForm;
 		this.playerContainer = _playerContainer;
 		this.reorderButton = document.getElementById("id_reorderbutton");
 		this.saveButton = document.getElementById("id_savebutton");
@@ -135,6 +136,8 @@
 	            var message = req.responseText;
 	            if (req.status == 200) {
 	              var songsToShow = JSON.parse(req.responseText);
+				  addSongForm.show(playlistid);
+				  self.addSongForm.playlistid.value = playlistid;
 				  if (songsToShow.length == 0) {
 					reorderButton.style.display = "none";
 					saveButton.style.display = "none";
@@ -316,6 +319,75 @@
 	    }
 
 	  }
+
+	function AddSongForm(addsongid, alert){
+		this.addSongForm = addsongid;
+		this.alert = alert;
+		var songselect = document.getElementById("songtoadd");
+		
+		this.show = function(playlistid) {
+	      var self = this;
+	      makeCall("GET", "GetSongsUser?playlistid="+playlistid, null,
+	        function(req) {
+	          if (req.readyState == 4) {
+	            var message = req.responseText;
+	            if (req.status == 200) {
+	              var songsOfUser = JSON.parse(req.responseText);
+	              if (songsOfUser.length == 0) {
+	                self.alert.textContent = "No songs to add!";
+	                return;
+	              }
+	            self.update(songsOfUser);
+	          } else if (req.status == 403) {
+                  window.location.href = req.getResponseHeader("Location");
+                  window.sessionStorage.removeItem('username');
+                  }
+                  else {
+	            //self.alert.textContent = message;
+	          }}
+	        }
+	      );
+	    };
+
+		this.update = function(songsOfUser) {	
+	   	  songselect.innerHTML = "";
+	      songsOfUser.forEach(function(song) { // self visible here, not this
+			optelement = document.createElement("option");
+			optelement.text = song.title;
+			optelement.value = song.id;
+			//optelement.setAttribute("songid", song.id);
+	        songselect.appendChild(optelement);
+	      });
+		}
+		
+		this.registerSongToAdd = function(orchestrator) {
+	      // Manage submit button
+	       this.addSongForm.querySelector("input[type='button'].submit").addEventListener('click', (e) => {
+	        valid = true;
+	        if (valid) {
+	          var self = this;
+			  playlistToReport = this.addSongForm.querySelector("input[type = 'hidden']").value;
+	          makeCall("POST", 'AddSong?playlistid='+playlistToReport+'&songid='+e.target.parentNode.childNodes[1].value, null,
+	            function(req) {
+	              if (req.readyState == XMLHttpRequest.DONE) {
+	                var message = req.responseText; // error message or mission id
+	                if (req.status == 200) {
+	                  orchestrator.refresh(playlistToReport); // id of the new mission passed
+	                } else if (req.status == 403) {
+                      window.location.href = req.getResponseHeader("Location");
+                      window.sessionStorage.removeItem('username');
+                  }
+                  else {
+	                  self.alert.textContent = message;
+	                }
+	              }
+	            }
+	          );
+	        }
+	      });
+		}
+	}
+
 		
 	function PlaylistForm(playlistId, alert) {
 	    this.playlistForm = playlistId;
@@ -403,7 +475,6 @@
 	      input.hidden = true;
 	    }
 	}
-
 	  function PageOrchestrator() {
 	    var alertContainer = document.getElementById("id_alert");
 	    
@@ -421,7 +492,8 @@
 			document.getElementById("id_songsorderbody"),
 			document.getElementById("id_createplaylistform"),
 			document.getElementById("id_createsongform"),
-			document.getElementById("playercontainer"));
+			document.getElementById("playercontainer"),
+			document.getElementById("id_addsongtoplaylist"));
 			
 
 		  songDetails = new SongDetails(
@@ -433,6 +505,9 @@
 	    };
 		  songForm = new SongForm(document.getElementById("id_createsongform"), alertContainer);
 		  songForm.registerSong(this);
+
+		  addSongForm = new AddSongForm(document.getElementById("id_addsongtoplaylist"),alertContainer);
+		  addSongForm.registerSongToAdd(this);
 
 		this.refresh = function(currentPlaylist) {
 	      alertContainer.textContent = "";        // not null after creation of status change

@@ -72,10 +72,21 @@ table{
     border-radius: 15px;
 }
 
-#add_song_to_playlist{
+#addsongtoplaylistcontainer{
 	background-color: rgb(92, 194, 109);
+	padding : 20px;
 	text-align : center;
-	margin : 0 auto;
+	margin-left : 375px;
+	margin-right : 300px;
+	border-radius : 15px;
+}
+
+#addsongtoplaylistcontainer label{
+	font-size : 20px;
+}
+
+#songtoadd{
+	font-size : 15px;
 }
 
 #id_songscontainer{
@@ -94,6 +105,7 @@ table{
 	height: 542px;
 	border: 5px solid green;
 }
+
 
 input{
     border: 3px #ccc;

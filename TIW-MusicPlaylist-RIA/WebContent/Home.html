@@ -81,11 +81,14 @@
 			<input type="button" value="Add Playlist" name="submit" class="submit">
 		</form>					
 	</div>
-	<div id="add_song_to_playlist">
+	<div id="addsongtoplaylistcontainer">
 		<h4>Add Song To Playlist</h4>
-		<form id="id_addsongtoplaylist">
+		<label for="song">Select the song</label>
+		<form id="id_addsongtoplaylist" action="#">
 			<select id="songtoadd">
-			</select>
+			</select><br>
+			<input type="hidden" name="playlistid"> 
+			<input type="button" value="Add Song to playlist" name="submit" class="submit">
 		</form>
 	</div>
 	<div id="song_form">
