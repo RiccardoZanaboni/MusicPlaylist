@@ -167,6 +167,7 @@ public class SongDAO {
 	}
 	
 	public void setOrder(int[] Ids,int playlistid) throws SQLException {
+		con.setAutoCommit(false);
 		String query = "UPDATE association SET ordering = ? WHERE songid = ? AND playlistid= ? ";
 		PreparedStatement pStatement = null;
 		try {
@@ -176,11 +177,14 @@ public class SongDAO {
 				pStatement.setInt(2, Ids[i]);
 				pStatement.setInt(3, playlistid);
 				pStatement.executeUpdate();
+				con.commit();
 			}
 		}catch(SQLException e) {
+			con.rollback();
 			System.out.println(e);
 			throw new SQLException(e);
 		}finally {
+			con.setAutoCommit(true);
 			try {
 				if (pStatement != null) {
 					pStatement.close();

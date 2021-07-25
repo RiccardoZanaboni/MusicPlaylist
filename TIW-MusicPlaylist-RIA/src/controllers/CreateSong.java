@@ -81,7 +81,7 @@ public class CreateSong extends HttpServlet {
 		InputStream imageContent = image_part.getInputStream();
 		Part file_part = request.getPart("song_file");
 		InputStream fileContent = file_part.getInputStream();
-
+		
 		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty() || release_date == null || release_date.isEmpty()){
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("missing parameters");
@@ -90,6 +90,30 @@ public class CreateSong extends HttpServlet {
 		if(image_part == null || image_part.getSize() <= 0 || file_part == null || file_part.getSize() <= 0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("missing file in request!");
+			return;
+		}
+
+		if(image_part.getSize() > 2000000 ) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("image file is too big");
+			return;
+		}
+		
+		if(file_part.getSize() > 2000000) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("song file is too big");
+			return;
+		}
+		
+		if((!image_part.getContentType().equals("image/png")) && (!image_part.getContentType().equals("image/jpeg"))) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("image file is not a jpeg/png file");
+			return;
+		}
+		
+		if(! file_part.getContentType().equals("audio/mpeg")) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("song file is not a mp3 file");
 			return;
 		}
 		
@@ -102,7 +126,13 @@ public class CreateSong extends HttpServlet {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Invalid Date format");
 		}
-		
+		Date today = new Date();
+
+        if(date.after(today)) {
+        	response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("release_date cannot be in the future");
+			return;
+        }
 		
 		SongDAO sDao = new SongDAO(connection);
 		
