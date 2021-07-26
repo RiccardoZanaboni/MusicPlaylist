@@ -13,6 +13,7 @@ import java.util.List;
 import beans.Song;
 import beans.User;
 import dao.SongDAO;
+import utils.ConnectionHandler;
 
 @WebServlet("/GetSongsUser")
 public class GetSongsUser extends HttpServlet{
@@ -24,20 +25,7 @@ public class GetSongsUser extends HttpServlet{
     }
 
     public void init() throws ServletException{
-		try {
-			ServletContext context = getServletContext();
-			String driver = context.getInitParameter("dbDriver");
-			String url = context.getInitParameter("dbUrl");
-			String user = context.getInitParameter("dbUser");
-			String password = context.getInitParameter("dbPassword");
-			Class.forName(driver);
-			connection = DriverManager.getConnection(url, user, password);
-
-		} catch (ClassNotFoundException e) {
-			throw new UnavailableException("Can't load database driver");
-		} catch (SQLException e) {
-			throw new UnavailableException("Couldn't get db connection");
-		}
+    	connection = ConnectionHandler.getConnection(getServletContext());
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
