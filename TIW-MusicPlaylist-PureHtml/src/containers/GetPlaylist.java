@@ -107,7 +107,6 @@ public class GetPlaylist extends HttpServlet {
 			return;
 		}
 		startingSongId = (startingSongId/5) * 5;
-		System.out.println(startingSongId);
 		if ((songsSize-startingSongId) > 0) {
 			if((songsSize-startingSongId)>5) {
 				songToView = songs.subList(startingSongId, (startingSongId+5));

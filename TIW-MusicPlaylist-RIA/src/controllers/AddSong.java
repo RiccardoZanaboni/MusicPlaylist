@@ -56,7 +56,8 @@ public class AddSong extends HttpServlet {
 		
 		String sId = StringEscapeUtils.escapeJava(request.getParameter("songid"));
 		if (sId == null || sId.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing song id parameter");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing song id parameter");
 			return;
 		}
 		int songId = -1;
