@@ -65,6 +65,7 @@ public class GetPlaylist extends HttpServlet {
 		
 		if(sId == null || sId.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing the starting songid");
+			return;
 		}
 		Integer startingSongId = null;
 		try {
@@ -101,6 +102,12 @@ public class GetPlaylist extends HttpServlet {
 		
 		songToView = songs;
 		Integer songsSize = songs.size();
+		if(startingSongId >songsSize) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "SongId value is too large");
+			return;
+		}
+		startingSongId = (startingSongId/5) * 5;
+		System.out.println(startingSongId);
 		if ((songsSize-startingSongId) > 0) {
 			if((songsSize-startingSongId)>5) {
 				songToView = songs.subList(startingSongId, (startingSongId+5));
@@ -121,6 +128,8 @@ public class GetPlaylist extends HttpServlet {
 		ctx.setVariable("nextSongId",nextSongId);
 		ctx.setVariable("previousSongId",previousSongId);
 		ctx.setVariable("songsSize", songsSize);
+		ctx.setVariable("songsUsersSize", songsOfUser.size());
+
 		templateEngine.process(path, ctx, response.getWriter());
 	}
 	

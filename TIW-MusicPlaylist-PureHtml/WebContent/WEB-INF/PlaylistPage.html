@@ -38,7 +38,7 @@
 		</div>
 	</div>
 	<br>
-	<div id="addsong-form">
+	<div th:if="${songsUsersSize} > 0" id="addsong-form">
 		<form th:action="@{/AddSong(playlistId=${playlist.id})}" method="POST">
 			<label for="song">Select the song</label>
 			<select name="songId">

@@ -65,7 +65,6 @@ public class CheckLogin extends HttpServlet {
 			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 			ctx.setVariable("errorMsg", "Incorrect username or password");
 			path = "/index.html";
-			System.out.println("ciaoo");
 			templateEngine.process(path, ctx, response.getWriter());
 		} else {
 			request.getSession().setAttribute("user", u);

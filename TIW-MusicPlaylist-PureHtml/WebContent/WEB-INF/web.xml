@@ -25,7 +25,8 @@ version="4.0">
  </filter> 
  <filter-mapping> 
     <filter-name>LoginChecker</filter-name> 
-    <url-pattern>/GoToHomePage</url-pattern> 
+    <url-pattern>/GoToHomePage</url-pattern>
+    <url-pattern>/GetSongDetails</url-pattern>  
     <url-pattern>/GetPlaylist</url-pattern> 
     <url-pattern>/CreatPlaylist</url-pattern> 
     <url-pattern>/CreateSong</url-pattern> 

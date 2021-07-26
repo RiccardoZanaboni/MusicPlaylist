@@ -65,6 +65,11 @@ public class GetSongDetails extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the song's extraction");
 			return;
 		}
+
+		if(song.getId()==0) { // songId starts from 1 in DB
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Song id doesn't exist in the db");
+			return;
+		}
 		String path = "WEB-INF/PlayerPage.html";
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
