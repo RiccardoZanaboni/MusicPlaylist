@@ -23,7 +23,7 @@ public class SongDAO {
 	public List<Song> findSongByPlaylistId(int playlistId,int creatorId) throws SQLException{
 		boolean test=false;
 		List<Song> songs = new ArrayList<Song>();
-		String query_test = "SELECT ordering FROM song join association on songid=id where playlistid=? and ordering=0 and creator=? ";
+		String query_test = "SELECT ordering FROM song join association on songid=id where playlistid=? and ordering=0 and creator=?";
 		try (PreparedStatement pstatement = con.prepareStatement(query_test);) {
 			pstatement.setInt(1, playlistId);
 			pstatement.setInt(2, creatorId);
