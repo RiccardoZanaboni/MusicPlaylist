@@ -54,7 +54,7 @@ public class GetSongDetails extends HttpServlet {
 			songId = Integer.parseInt(sId);
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect songId value");
 			return;
 		}
 		SongDAO sDao= new SongDAO(connection);
@@ -62,7 +62,7 @@ public class GetSongDetails extends HttpServlet {
 		try {
 			song = sDao.findSongById(songId);
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the song's  extraction");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the song's extraction");
 			return;
 		}
 		String path = "WEB-INF/PlayerPage.html";

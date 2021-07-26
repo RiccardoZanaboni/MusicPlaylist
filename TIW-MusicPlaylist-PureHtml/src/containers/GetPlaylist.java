@@ -59,7 +59,7 @@ public class GetPlaylist extends HttpServlet {
 			playlistId = Integer.parseInt(pId);
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect playlistId value");
 			return;
 		}
 		
@@ -71,7 +71,7 @@ public class GetPlaylist extends HttpServlet {
 			startingSongId = Integer.parseInt(sId);
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect param values");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Incorrect SongId value");
 			return;
 		}
 		
@@ -80,7 +80,7 @@ public class GetPlaylist extends HttpServlet {
 		try {
 			playlist = pDao.findPlaylistById(playlistId);
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's  extraction");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's extraction");
 			return;
 		}
 		SongDAO sDao = new SongDAO(connection);

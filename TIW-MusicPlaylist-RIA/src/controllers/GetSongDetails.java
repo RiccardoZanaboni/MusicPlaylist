@@ -43,7 +43,7 @@ public class GetSongDetails extends HttpServlet {
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Incorrect param values");
+			response.getWriter().println("Incorrect songId value");
 			return;
 		}
 		SongDAO sDao= new SongDAO(connection);
@@ -52,7 +52,7 @@ public class GetSongDetails extends HttpServlet {
 			song = sDao.findSongById(songId);
 		}catch(SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Failure in the song's  extraction");
+			response.getWriter().println("Failure in the song's extraction");
 			return;
 		}
 		Gson gson = new GsonBuilder()

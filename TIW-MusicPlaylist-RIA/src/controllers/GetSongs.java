@@ -36,7 +36,7 @@ public class GetSongs extends HttpServlet{
 		} catch (NumberFormatException | NullPointerException e) {
 			// only for debugging e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Incorrect param values");
+			response.getWriter().println("Incorrect playlistId value");
 			return;
 		}
     	
@@ -48,7 +48,7 @@ public class GetSongs extends HttpServlet{
 			songs = sDao.findSongByPlaylistId(playlistId);
 		}catch(SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Not possible to recover ss");
+			response.getWriter().println("Not possible to recover songs");
 			return;
 		}
 		

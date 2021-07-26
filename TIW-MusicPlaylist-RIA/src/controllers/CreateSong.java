@@ -69,24 +69,30 @@ public class CreateSong extends HttpServlet {
 		
 		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty() || release_date == null || release_date.isEmpty()){
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("missing parameters");
+			response.getWriter().println("Missing parameters");
 		}
 		
-		if(image_part == null || image_part.getSize() <= 0 || file_part == null || file_part.getSize() <= 0) {
+		if(file_part == null || file_part.getSize() <= 0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("missing file in request!");
+			response.getWriter().println("Missing file in request!");
+			return;
+		}
+		
+		if(image_part == null || image_part.getSize() <= 0) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing image in request!");
 			return;
 		}
 		
 		if((!image_part.getContentType().equals("image/png")) && (!image_part.getContentType().equals("image/jpeg"))) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("image file is not a jpeg/png file");
+			response.getWriter().println("Image file is not a jpeg/png file");
 			return;
 		}
 		
 		if(! file_part.getContentType().equals("audio/mpeg")) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("song file is not a mp3 file");
+			response.getWriter().println("Song file is not a mp3 file");
 			return;
 		}
 

@@ -35,7 +35,7 @@ public class GetSongsUser extends HttpServlet{
 			playlistId = Integer.parseInt(request.getParameter("playlistid"));
 		} catch (NumberFormatException | NullPointerException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Incorrect param values");
+			response.getWriter().println("Incorrect playlistId value");
 			return;
 		}
     	
@@ -47,7 +47,7 @@ public class GetSongsUser extends HttpServlet{
 			songs = sDao.findSongByUserId(u.getId(), playlistId);
 		}catch(SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Not possible to recover ss");
+			response.getWriter().println("Not possible to recover songs");
 			return;
 		}
 		

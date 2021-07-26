@@ -77,31 +77,36 @@ public class CreateSong extends HttpServlet {
 		InputStream fileContent = file_part.getInputStream();
 
 		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty() || release_date == null || release_date.isEmpty()){
-			String error = "missing parameters";
+			String error = "Missing parameters";
 		}
 		
-		if(image_part == null || image_part.getSize() <= 0 || file_part == null || file_part.getSize() <= 0) {
+		if(file_part == null || file_part.getSize() <= 0) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing file in request!");
 			return;
 		}
 		
+		if(image_part == null || image_part.getSize() <= 0) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing image in request!");
+			return;
+		}
+		
 		if((!image_part.getContentType().equals("image/png")) && (!image_part.getContentType().equals("image/jpeg"))) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "image file is not a jpeg/png file!");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Image file is not a jpeg/png file!");
 			return;
 		}
 		
 		if(! file_part.getContentType().equals("audio/mpeg")) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "song file is not a mp3 file!");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Song file is not a mp3 file!");
 			return;
 		}
 
 		if(image_part.getSize() > 2000000 ) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "image file is too big!");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Image file is too big!");
 			return;
 		}
 		
 		if(file_part.getSize() > 2000000) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "song file is too big!");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Song file is too big!");
 			return;
 		}
 		
@@ -116,7 +121,7 @@ public class CreateSong extends HttpServlet {
 		Date today = new Date();
 
         if(date.after(today)) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "release_date cannot be in the future!");
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Release_date cannot be in the future!");
 			return;
         }
 		
