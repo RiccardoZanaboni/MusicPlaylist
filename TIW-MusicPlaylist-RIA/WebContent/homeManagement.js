@@ -56,6 +56,8 @@
 	              if (playlistToShow.length == 0) {
 					document.getElementById("buttons").style.display="none";
 					document.getElementById("addsongtoplaylistcontainer").style.display="none";
+					document.getElementById("playercontainer").style.display="none";
+					document.getElementById("songscontainerorder").style.display="none";
 	                self.alert.textContent = "No playlist yet!";
 	                return;
 	              }
@@ -213,7 +215,7 @@
 	      });
 	      self.saveButton.style.display = "none";	
 		  self.songscontainerbody.appendChild(row);
-		  this.songscontainer.style.display = "block";	
+		  self.songscontainer.style.display = "block";	
 		  self.reorderButton.style.display = "block";
 		  if(arraySongs[index+1] != undefined){
 			newr = rightbutton.cloneNode(true);
@@ -324,14 +326,15 @@
 
 	  }
 
-	function AddSongForm(addsongid, alert){
+	function AddSongForm(addsongid,_addsongcontainer, alert){
 		this.addSongForm = addsongid;
+		this.addSongContainer = _addsongcontainer;
 		this.alert = alert;
 		var songselect = document.getElementById("songtoadd");
 		
 		this.show = function(playlistid) {
 	      var self = this;
-		  this.addSongForm.style.display="block";
+		  self.addSongContainer.style.display="block";
 	      makeCall("GET", "GetSongsUser?playlistid="+playlistid, null,
 	        function(req) {
 	          if (req.readyState == 4) {
@@ -339,6 +342,7 @@
 	            if (req.status == 200) {
 	              var songsOfUser = JSON.parse(req.responseText);
 	              if (songsOfUser.length == 0) {
+		            self.addSongContainer.style.display="none";
 	                self.alert.textContent = "No songs to add!";
 					songselect.innerHTML = "";
 	                return;
@@ -421,7 +425,7 @@
                   }
                   else {
 	                  self.alert.textContent = message;
-	                  self.reset();
+	                  //self.reset();
 	                }
 	              }
 	            }
@@ -467,7 +471,7 @@
                   }
                   else {
 	                  self.alert.textContent = message;
-	                  self.reset();
+	                  //self.reset();
 	                }
 	              }
 	            }
@@ -516,7 +520,7 @@
 		  songForm = new SongForm(document.getElementById("id_createsongform"), alert_songform);
 		  songForm.registerSong(this);
 
-		  addSongForm = new AddSongForm(document.getElementById("id_addsongtoplaylist"),alert_addform);
+		  addSongForm = new AddSongForm(document.getElementById("id_addsongtoplaylist"),document.getElementById("addsongtoplaylistcontainer"),alert_addform);
 		  addSongForm.registerSongToAdd(this);
 
 		this.refresh = function(currentPlaylist) {
@@ -532,8 +536,8 @@
 	      }); // closure preserves visibility of this);
 
 		  //TODO playlistDetails.reset();
-		  playlistForm.reset();
-		  songForm.reset(); //CONTROLLARE SE ANCHE SENZA I RESET I VALORI VENGO AZZERATI
+		  /*playlistForm.reset();
+		  songForm.reset();*/ //CONTROLLARE SE ANCHE SENZA I RESET I VALORI VENGO AZZERATI
 	  	};
 	  }	
 }
