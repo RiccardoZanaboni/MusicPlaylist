@@ -41,7 +41,7 @@
 	<div id="addsong-form">
 		<form th:action="@{/AddSong(playlistId=${playlist.id})}" method="POST">
 			<label for="song">Select the song</label>
-			<select name="song">
+			<select name="songId">
 				<option th:each="song : ${songsOfUser}" th:value="${song.id}"  th:text="${song.title}">Boogieman</option>
 			</select>
 			<input type="submit" value="Add song to the playlist">

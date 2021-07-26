@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
 <link rel="stylesheet" type="text/css" media="all" href="CSS/IndexStyle.css"/>
@@ -14,6 +14,7 @@
 			<label for="pwd">Password:</label>
 			<br><input class="form_field" type="password" name="pwd"><br> 
 			<input id="login_button" type="submit" value="Login">
+			<p th:text=" ${errorMsg}"></p>
 		</form>
 	</div>
 </body>

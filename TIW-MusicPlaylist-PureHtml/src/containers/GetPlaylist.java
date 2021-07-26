@@ -64,6 +64,7 @@ public class GetPlaylist extends HttpServlet {
 		
 		if(pId == null || pId.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing the playlist id");
+			return;
 		}
 		
 		Integer playlistId = null;

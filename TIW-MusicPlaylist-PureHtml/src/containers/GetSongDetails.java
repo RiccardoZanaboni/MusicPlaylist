@@ -60,6 +60,7 @@ public class GetSongDetails extends HttpServlet {
 		String sId = request.getParameter("songId");
 		if(sId == null || sId.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing song id value");
+			return;
 		}
 		Integer songId = null;
 		try {

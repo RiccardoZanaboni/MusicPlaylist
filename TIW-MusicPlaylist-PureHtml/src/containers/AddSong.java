@@ -77,7 +77,7 @@ public class AddSong extends HttpServlet {
 			return;
 		}
 		
-		String sId = request.getParameter("song");
+		String sId = request.getParameter("songId");
 		
 		if (sId == null || sId.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing song id parameter");
@@ -99,7 +99,8 @@ public class AddSong extends HttpServlet {
 			sDao.setPlaylistId(playlistId, songId);
 			
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Cannot insert the song in the playlist by the DB side");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Song id or playlist id don't exist in their DB tables");
+			return;
 		}
 		
 		String path = getServletContext().getContextPath() + "/GetPlaylist?playlistId="+playlistId+"&songId=0";	//Al momento dopo aver aggiunto una canzone ritorno alla prima pagina
