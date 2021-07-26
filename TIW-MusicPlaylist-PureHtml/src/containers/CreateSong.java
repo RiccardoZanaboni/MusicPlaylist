@@ -85,6 +85,26 @@ public class CreateSong extends HttpServlet {
 			return;
 		}
 		
+		if((!image_part.getContentType().equals("image/png")) && (!image_part.getContentType().equals("image/jpeg"))) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "image file is not a jpeg/png file!");
+			return;
+		}
+		
+		if(! file_part.getContentType().equals("audio/mpeg")) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "song file is not a mp3 file!");
+			return;
+		}
+
+		if(image_part.getSize() > 2000000 ) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "image file is too big!");
+			return;
+		}
+		
+		if(file_part.getSize() > 2000000) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "song file is too big!");
+			return;
+		}
+		
 		Date date = null;
 		
 		try {
@@ -93,7 +113,12 @@ public class CreateSong extends HttpServlet {
 		}catch(ParseException e1) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Date format");
 		}
-		
+		Date today = new Date();
+
+        if(date.after(today)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "release_date cannot be in the future!");
+			return;
+        }
 		
 		SongDAO sDao = new SongDAO(connection);
 		
