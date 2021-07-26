@@ -54,6 +54,8 @@
 	            if (req.status == 200) {
 	              var playlistToShow = JSON.parse(req.responseText);
 	              if (playlistToShow.length == 0) {
+					document.getElementById("buttons").style.display="none";
+					document.getElementById("addsongtoplaylistcontainer").style.display="none";
 	                self.alert.textContent = "No playlist yet!";
 	                return;
 	              }
@@ -160,8 +162,7 @@
 				} else if (req.status == 403) {
                   window.location.href = req.getResponseHeader("Location");
                   window.sessionStorage.removeItem('username');
-                  }
-                  else {
+                } else {
 	            self.alert.textContent = message;
 	          }}
 	        }
@@ -189,9 +190,6 @@
 	      this.songscontainerbody.innerHTML = ""; // empty the table body
 	      // build updated list
 	      var self = this;
-		  if(eventListenerPresence){
-			this.leftbutton.removeEventListner('click');
-		  }
 	      arraySongs[index].forEach(function(song) { // self visible here, not this
 			linkcell = document.createElement("td");
 			imgDiv=document.createElement("div");
@@ -218,6 +216,9 @@
 		  this.songscontainer.style.display = "block";	
 		  self.reorderButton.style.display = "block";
 		  if(arraySongs[index+1] != undefined){
+			newr = rightbutton.cloneNode(true);
+			rightbutton.replaceWith(newr);
+			rightbutton=newr;
 			rightbutton.style.visibility = "visible";
 			rightbutton.style.display = "block";
 			rightbutton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
@@ -228,6 +229,9 @@
 			rightbutton.style.display = "block";
 		  }
 		  if(arraySongs[index-1] != undefined){
+			newl = leftbutton.cloneNode(true);
+			leftbutton.replaceWith(newl);
+			leftbutton=newl;
 			leftbutton.style.visibility = "visible";
 			leftbutton.style.display = "block";
 			leftbutton.querySelector("input[type='button'].submit").addEventListener("click", (e) => {
@@ -327,6 +331,7 @@
 		
 		this.show = function(playlistid) {
 	      var self = this;
+		  this.addSongForm.style.display="block";
 	      makeCall("GET", "GetSongsUser?playlistid="+playlistid, null,
 	        function(req) {
 	          if (req.readyState == 4) {
@@ -335,15 +340,16 @@
 	              var songsOfUser = JSON.parse(req.responseText);
 	              if (songsOfUser.length == 0) {
 	                self.alert.textContent = "No songs to add!";
+					songselect.innerHTML = "";
 	                return;
 	              }
+				self.alert.textContent = "";
 	            self.update(songsOfUser);
 	          } else if (req.status == 403) {
                   window.location.href = req.getResponseHeader("Location");
                   window.sessionStorage.removeItem('username');
-                  }
-                  else {
-	            //self.alert.textContent = message;
+              } else {
+	            self.alert.textContent = message;
 	          }}
 	        }
 	      );
@@ -376,8 +382,7 @@
 	                } else if (req.status == 403) {
                       window.location.href = req.getResponseHeader("Location");
                       window.sessionStorage.removeItem('username');
-                  }
-                  else {
+                    } else {
 	                  self.alert.textContent = message;
 	                }
 	              }
@@ -476,16 +481,21 @@
 	    }
 	}
 	  function PageOrchestrator() {
-	    var alertContainer = document.getElementById("id_alert");
-	    
+		var alert_playlist = document.getElementById("id_alert_playlist");
+		var alert_songs = document.getElementById("id_alert_songs");
+		var alert_player = document.getElementById("id_alert_player");
+		var alert_playlistform = document.getElementById("id_alert_playlistform");
+		var alert_songform = document.getElementById("id_alert_songform");
+		var alert_addform = document.getElementById("id_alert_addform");
+
 	    this.start = function() {
 	      playlistList = new PlaylistList(
-	        alertContainer,
+	        alert_playlist,
 	        document.getElementById("id_playlistcontainer"),
 	        document.getElementById("id_playlistcontainerbody"));
 		  
 		  playlistDetails = new PlaylistDetails(
-			alertContainer,
+			alert_songs,
 			document.getElementById("songscontainer"),
 			document.getElementById("id_songscontainerbody"),
 			document.getElementById("songscontainerorder"),
@@ -497,21 +507,27 @@
 			
 
 		  songDetails = new SongDetails(
-	        alertContainer,
+	        alert_player,
 	        document.getElementById("playercontainer"));
 
-		  playlistForm = new PlaylistForm(document.getElementById("id_createplaylistform"), alertContainer);
+		  playlistForm = new PlaylistForm(document.getElementById("id_createplaylistform"), alert_playlistform);
 	      playlistForm.registerPlaylist(this);  // the orchestrator passes itself --this-- so that the playlistForm can call its refresh function after creating a mission
 	    };
-		  songForm = new SongForm(document.getElementById("id_createsongform"), alertContainer);
+		  songForm = new SongForm(document.getElementById("id_createsongform"), alert_songform);
 		  songForm.registerSong(this);
 
-		  addSongForm = new AddSongForm(document.getElementById("id_addsongtoplaylist"),alertContainer);
+		  addSongForm = new AddSongForm(document.getElementById("id_addsongtoplaylist"),alert_addform);
 		  addSongForm.registerSongToAdd(this);
 
 		this.refresh = function(currentPlaylist) {
-	      alertContainer.textContent = "";        // not null after creation of status change
-	      playlistList.show(function() {
+	      alert_playlist.textContent = "";        // not null after creation of status change
+	      alert_songs.textContent = "";
+		  alert_player.textContent = "";
+    	  alert_playlistform.textContent = "";
+		  alert_songform.textContent = "";
+		  alert_addform.textContent = "";
+
+		  playlistList.show(function() {
 	        playlistList.autoclick(currentPlaylist); 
 	      }); // closure preserves visibility of this);
 

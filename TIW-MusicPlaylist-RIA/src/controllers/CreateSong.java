@@ -92,18 +92,6 @@ public class CreateSong extends HttpServlet {
 			response.getWriter().println("missing file in request!");
 			return;
 		}
-
-		if(image_part.getSize() > 2000000 ) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("image file is too big");
-			return;
-		}
-		
-		if(file_part.getSize() > 2000000) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("song file is too big");
-			return;
-		}
 		
 		if((!image_part.getContentType().equals("image/png")) && (!image_part.getContentType().equals("image/jpeg"))) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -114,6 +102,18 @@ public class CreateSong extends HttpServlet {
 		if(! file_part.getContentType().equals("audio/mpeg")) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("song file is not a mp3 file");
+			return;
+		}
+
+		if(image_part.getSize() > 2000000 ) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("image file is too big");
+			return;
+		}
+		
+		if(file_part.getSize() > 2000000) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("song file is too big");
 			return;
 		}
 		
