@@ -20,11 +20,12 @@ public class SongDAO {
 		this.con = connection;
 	}
 	
-	public List<Song> findSongByPlaylistId(int playlistId) throws SQLException{
+	public List<Song> findSongByPlaylistId(int playlistId,int creatorId) throws SQLException{
 		List<Song> songs = new ArrayList<Song>();
-		String query = "SELECT id, title, image FROM song join association on songid=id where playlistid=? order by release_date desc";
+		String query = "SELECT id, title, image FROM song join association on songid=id where playlistid=? and creatorId= ? order by release_date desc";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, playlistId);
+			pstatement.setInt(2, creatorId);
 			Blob image_blob = null;
 			Blob file_blob = null;
 			try (ResultSet result = pstatement.executeQuery();) {
@@ -120,11 +121,12 @@ public class SongDAO {
 		}
 	}
 	
-	public Song findSongById(int songId) throws SQLException{
+	public Song findSongById(int songId,int creatorId) throws SQLException{
 		Song song = new Song();
-		String query = "SELECT id, title, image, singer, release_date, musical_genre, file FROM song where id = ?";
+		String query = "SELECT id, title, image, singer, release_date, musical_genre, file FROM song where id = ? and creator = ?";
 		try (PreparedStatement pstatement = con.prepareStatement(query);) {
 			pstatement.setInt(1, songId);
+			pstatement.setInt(1, creatorId);
 			Blob image_blob = null;
 			Blob file_blob = null;
 			try (ResultSet result = pstatement.executeQuery();) {

@@ -30,11 +30,18 @@ public class GetSongs extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
+    	String pId = request.getParameter("playlistid");
     	Integer playlistId = null;
+    	
+    	if(pId == null){
+    		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing playlistId value");
+			return;
+    	}
+    	
 		try {
 			playlistId = Integer.parseInt(request.getParameter("playlistid"));
 		} catch (NumberFormatException | NullPointerException e) {
-			// only for debugging e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Incorrect playlistId value");
 			return;
@@ -45,7 +52,7 @@ public class GetSongs extends HttpServlet{
 		SongDAO sDao = new SongDAO(connection);
 		List<Song> songs = null;
 		try {
-			songs = sDao.findSongByPlaylistId(playlistId);
+			songs = sDao.findSongByPlaylistId(playlistId,u.getId());
 		}catch(SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Not possible to recover songs");

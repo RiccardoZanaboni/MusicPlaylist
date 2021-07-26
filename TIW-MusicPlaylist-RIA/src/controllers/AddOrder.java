@@ -39,7 +39,26 @@ public class AddOrder extends HttpServlet {
 
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String pId = StringEscapeUtils.escapeJava(request.getParameter("playlistId"));
+		if(pId == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing playlistId");
+			return;
+		}
+		int playlistId = -1;
+		try {
+			playlistId = Integer.parseInt(pId);
+		}catch (NumberFormatException e) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Bad number format for playlist id");
+			return;
+		}
 		String arrayId = StringEscapeUtils.escapeJava(request.getParameter("arrayId"));
+		if(arrayId == null) {
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("No songs to order!");
+			return;
+		}
 		String[] Ids = arrayId.split(",");
 		if (Ids == null || Ids.length==0) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -50,22 +69,13 @@ public class AddOrder extends HttpServlet {
 	      for(int i=0; i<Ids.length; i++) {
 	    	  songIds[i] = Integer.parseInt(Ids[i]);
 	      }
-		String pId = StringEscapeUtils.escapeJava(request.getParameter("playlistId"));
-		int playlistId = -1;
-		try {
-			playlistId = Integer.parseInt(pId);
-		
-		}catch (NumberFormatException e) {
-			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Bad number format for playlist id");
-			return;
-		}
 		SongDAO sDao = new SongDAO(connection);
 		try {
 			sDao.setOrder(songIds,playlistId);
 		}catch(SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			response.getWriter().println("Cannot set order of songs");
+			return;
 		}
 		response.setStatus(HttpServletResponse.SC_OK);
 		response.setContentType("application/json");

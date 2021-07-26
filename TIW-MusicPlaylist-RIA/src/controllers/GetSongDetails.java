@@ -9,11 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import beans.Song;
+import beans.User;
 import dao.SongDAO;
 import utils.ConnectionHandler;
 
@@ -32,10 +34,13 @@ public class GetSongDetails extends HttpServlet {
     }
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession s = request.getSession();
+		User u = (User)s.getAttribute("user");
 		String sId = request.getParameter("songId");
 		if(sId == null || sId.isEmpty()) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Missing song id value");
+			return;
 		}
 		Integer songId = null;
 		try {
@@ -49,10 +54,14 @@ public class GetSongDetails extends HttpServlet {
 		SongDAO sDao= new SongDAO(connection);
 		Song song = null;
 		try {
-			song = sDao.findSongById(songId);
+			song = sDao.findSongById(songId,u.getId());
 		}catch(SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Failure in the song's extraction");
+			response.getWriter().println("Failure in the song's extraction or you don't have a song with that id");
+			return;
+		}
+		if(song.getId()==0) { // songId starts from 1 in DB, 0 is the same of null
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Song id doesn't exist in the db");
 			return;
 		}
 		Gson gson = new GsonBuilder()

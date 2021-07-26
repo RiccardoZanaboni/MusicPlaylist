@@ -92,7 +92,7 @@ public class GetPlaylist extends HttpServlet {
 		User u = (User) s.getAttribute("user");
 		int userId = u.getId();
 		try {
-			songs = sDao.findSongByPlaylistId(playlistId);
+			songs = sDao.findSongByPlaylistId(playlistId,userId);
 			songsOfUser = sDao.findSongByUserId(userId,playlistId);
 		}catch(SQLException e) {
 			System.out.println(e);

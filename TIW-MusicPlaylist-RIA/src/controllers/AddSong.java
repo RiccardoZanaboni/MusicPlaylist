@@ -50,7 +50,7 @@ public class AddSong extends HttpServlet {
 			playlistId = Integer.parseInt(pId);
 		}catch (NumberFormatException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Incorrect playlistId value");
+			response.getWriter().println("Bad number format for playlist id");
 			return;
 		}
 		
@@ -65,7 +65,7 @@ public class AddSong extends HttpServlet {
 			
 		}catch (NumberFormatException e) {
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			response.getWriter().println("Incorrect songId value");
+			response.getWriter().println("Bad number format for song id");
 			return;
 		}
 		
@@ -75,7 +75,7 @@ public class AddSong extends HttpServlet {
 			
 		}catch(SQLException e) {
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-			response.getWriter().println("Failure in the change of song's field 'playlistid'");
+			response.getWriter().println("Song id or playlist id don't exist in their DB tables or the selected song is already in the playlist");
 			return;
 		}
 		

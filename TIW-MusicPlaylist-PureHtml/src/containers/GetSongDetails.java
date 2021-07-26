@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
@@ -18,6 +19,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import beans.Playlist;
 import beans.Song;
+import beans.User;
 import dao.PlaylistDAO;
 import dao.SongDAO;
 import utils.ConnectionHandler;
@@ -44,6 +46,8 @@ public class GetSongDetails extends HttpServlet {
     }
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		HttpSession s = request.getSession();
+		User u = (User)s.getAttribute("user");
 		String sId = request.getParameter("songId");
 		if(sId == null || sId.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing song id value");
@@ -60,9 +64,9 @@ public class GetSongDetails extends HttpServlet {
 		SongDAO sDao= new SongDAO(connection);
 		Song song = null;
 		try {
-			song = sDao.findSongById(songId);
+			song = sDao.findSongById(songId,u.getId());
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the song's extraction");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the song's extraction or you don't have a song with that id");
 			return;
 		}
 

@@ -86,7 +86,7 @@ public class AddSong extends HttpServlet {
 			sDao.setPlaylistId(playlistId, songId);
 			
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Song id or playlist id don't exist in their DB tables");
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Song id or playlist id don't exist in their DB tables or the selected song is already in the playlist");
 			return;
 		}
 		

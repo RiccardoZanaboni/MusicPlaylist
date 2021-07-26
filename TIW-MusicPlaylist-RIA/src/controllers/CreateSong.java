@@ -62,11 +62,23 @@ public class CreateSong extends HttpServlet {
 		String singer = StringEscapeUtils.escapeJava(request.getParameter("singer"));
 		String genre = StringEscapeUtils.escapeJava(request.getParameter("music_genre"));
 		String release_date = StringEscapeUtils.escapeJava(request.getParameter("release_date"));
-		Part image_part = request.getPart("song_image");
+		Part image_part;
+		try {
+			image_part = request.getPart("song_image");
+		}catch(Exception e){
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing files in request!");
+			return;
+		}
 		InputStream imageContent = image_part.getInputStream();
-		Part file_part = request.getPart("song_file");
+		Part file_part;
+		try {
+			file_part = request.getPart("song_file");
+		}catch(Exception e) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing files in request!");
+			return;
+		}
 		InputStream fileContent = file_part.getInputStream();
-		
+
 		if(song_title == null || song_title.isEmpty() || singer == null || singer.isEmpty() || genre == null || genre.isEmpty() || release_date == null || release_date.isEmpty()){
 			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			response.getWriter().println("Missing parameters");

@@ -30,7 +30,15 @@ public class GetSongsUser extends HttpServlet{
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	
+    	String pId = request.getParameter("playlistid");
     	Integer playlistId = null;
+    	
+    	if(pId == null){
+    		response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing playlistId value");
+			return;
+    	}
+    	
 		try {
 			playlistId = Integer.parseInt(request.getParameter("playlistid"));
 		} catch (NumberFormatException | NullPointerException e) {
