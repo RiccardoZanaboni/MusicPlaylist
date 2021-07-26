@@ -425,7 +425,7 @@
                   }
                   else {
 	                  self.alert.textContent = message;
-	                  //self.reset();
+	                  
 	                }
 	              }
 	            }
@@ -433,10 +433,6 @@
 	        }
 	      });
 		}
-		this.reset = function() {
-	      var title = document.querySelectorAll("#" + this.playlistForm.id + " form");
-	      title.hidden = true;
-	    }
 	}
 
 	function SongForm(songId, alert) {
@@ -471,7 +467,6 @@
                   }
                   else {
 	                  self.alert.textContent = message;
-	                  //self.reset();
 	                }
 	              }
 	            }
@@ -479,10 +474,6 @@
 	        }
 	      });
 		}
-		this.reset = function() {
-	      var input = document.querySelectorAll("#" + this.songForm.id + " form");
-	      input.hidden = true;
-	    }
 	}
 	  function PageOrchestrator() {
 		var alert_playlist = document.getElementById("id_alert_playlist");
@@ -535,9 +526,6 @@
 	        playlistList.autoclick(currentPlaylist); 
 	      }); // closure preserves visibility of this);
 
-		  //TODO playlistDetails.reset();
-		  /*playlistForm.reset();
-		  songForm.reset();*/ //CONTROLLARE SE ANCHE SENZA I RESET I VALORI VENGO AZZERATI
 	  	};
 	  }	
 }
