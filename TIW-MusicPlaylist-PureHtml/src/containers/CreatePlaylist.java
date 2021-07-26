@@ -2,17 +2,12 @@ package containers;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-//import java.text.DateFormat;
+
 import java.util.Date;
-//import java.util.Locale;
-//import java.util.TimeZone;
-//import java.text.SimpleDateFormat;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +20,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import beans.User;
 import dao.PlaylistDAO;
+import utils.ConnectionHandler;
 
 
 @WebServlet("/CreatePlaylist")
@@ -45,19 +41,7 @@ public class CreatePlaylist extends HttpServlet {
     	this.templateEngine = new TemplateEngine();
     	this.templateEngine.setTemplateResolver(templateResolver);
     	templateResolver.setSuffix(".html");
-    	try {
-    		ServletContext context = getServletContext();
-    		String driver = context.getInitParameter("dbDriver");
-    		String url = context.getInitParameter("dbUrl");
-    		String user = context.getInitParameter("dbUser");
-    		String password = context.getInitParameter("dbPassword");
-    		Class.forName(driver);
-    		connection = DriverManager.getConnection(url, user, password);
-    	}catch(SQLException e) {
-    		throw new UnavailableException("Couldn't get the Database connection");
-    	}catch(ClassNotFoundException e) {
-    		throw new UnavailableException("Error in the load of Database driver");
-    	}
+    	connection = ConnectionHandler.getConnection(getServletContext());
     }
 
 	

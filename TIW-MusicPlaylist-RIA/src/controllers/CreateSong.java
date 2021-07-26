@@ -3,15 +3,12 @@ package controllers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.UnavailableException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,6 +22,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import beans.User;
 import dao.PlaylistDAO;
 import dao.SongDAO;
+import utils.ConnectionHandler;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -47,20 +45,7 @@ public class CreateSong extends HttpServlet {
     }
     
     public void init() throws ServletException{
-    	ServletContext servletContext = getServletContext();
-    	try {
-    		ServletContext context = getServletContext();
-    		String driver = context.getInitParameter("dbDriver");
-    		String url = context.getInitParameter("dbUrl");
-    		String password = context.getInitParameter("dbPassword");
-    		String user = context.getInitParameter("dbUser");
-    		Class.forName(driver);
-    		connection = DriverManager.getConnection(url, user, password);
-    	}catch(SQLException e) {
-    		throw new UnavailableException("Couldn't reach the Database");
-    	}catch(ClassNotFoundException e) {
-    		throw new UnavailableException("Erroor in the loading of the Database Driver");
-    	}
+    	connection = ConnectionHandler.getConnection(getServletContext());
     }
 
 	
