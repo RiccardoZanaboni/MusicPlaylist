@@ -41,7 +41,8 @@ public class AddSong extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String pId = request.getParameter("playlistid");
 		if (pId == null || pId.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing playlistId parameter");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing playlistId parameter");
 			return;
 		}
 		
@@ -56,7 +57,8 @@ public class AddSong extends HttpServlet {
 		
 		String sId = StringEscapeUtils.escapeJava(request.getParameter("songid"));
 		if (sId == null || sId.isEmpty()) {
-			response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Missing song id parameter");
+			response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			response.getWriter().println("Missing song id parameter");
 			return;
 		}
 		int songId = -1;
