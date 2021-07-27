@@ -63,3 +63,11 @@ thead,th,td,tr{
     padding : 15px;
     font-size: 25px;
 }
+
+select{
+    border: 3px #ccc;
+	height : 30px;
+	width : 200px;
+	border-radius : 13px;
+	font-size: 15px;
+}

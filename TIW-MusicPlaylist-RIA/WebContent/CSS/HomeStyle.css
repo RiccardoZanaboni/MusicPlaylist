@@ -21,7 +21,7 @@ h1{
 #maincontainer{
 	height : 500px;
 	padding : 10px;
-	padding-bottom : 350px;
+	padding-bottom : 380px;
 }
 
 #leftbutton{
@@ -116,6 +116,14 @@ input{
 	padding: 12px 20px;
     padding-bottom: 15px;
 }
+
+select{
+    border: 3px #ccc;
+	height : 30px;
+	width : 200px;
+	border-radius : 13px;
+	font-size: 15px;
+}
 input[type="file"]{
     padding: 20px;
 }
@@ -190,11 +198,11 @@ audio{
 
 #genre{
 	float: left;
-	margin-left: 50px;
+	margin-left: 20px;
 }
 
 #singer{
-	margin-left: 100px;	
+	margin-left: 50px;	
 }
 
 .title{
