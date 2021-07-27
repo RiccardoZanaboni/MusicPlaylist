@@ -76,10 +76,14 @@ public class GetPlaylist extends HttpServlet {
 			return;
 		}
 		
+		HttpSession s = request.getSession();
+		User u = (User) s.getAttribute("user");
+		int userId = u.getId();
+		
 		PlaylistDAO pDao= new PlaylistDAO(connection);
 		Playlist playlist = null;
 		try {
-			playlist = pDao.findPlaylistById(playlistId);
+			playlist = pDao.findPlaylistById(playlistId, userId);
 		}catch(SQLException e) {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's extraction");
 			return;
@@ -92,9 +96,6 @@ public class GetPlaylist extends HttpServlet {
 		List<Song> songs = null;
 		List<Song> songsOfUser = null;
 		List<Song> songToView = null;
-		HttpSession s = request.getSession();
-		User u = (User) s.getAttribute("user");
-		int userId = u.getId();
 		try {
 			songs = sDao.findSongByPlaylistId(playlistId,userId);
 			songsOfUser = sDao.findSongByUserId(userId,playlistId);
