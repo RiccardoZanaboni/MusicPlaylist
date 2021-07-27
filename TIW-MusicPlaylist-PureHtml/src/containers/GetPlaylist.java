@@ -84,6 +84,10 @@ public class GetPlaylist extends HttpServlet {
 			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "Failure in the playlist's extraction");
 			return;
 		}
+		if(playlist.getTitle() == null) {
+			response.sendError(HttpServletResponse.SC_BAD_GATEWAY, "This playlist doesn't exist");
+			return;
+		}
 		SongDAO sDao = new SongDAO(connection);
 		List<Song> songs = null;
 		List<Song> songsOfUser = null;
