@@ -1,4 +1,7 @@
 # TIW-MusicPlaylist
+*Web Technologies course project at Politecnico of Milan Developed in collaboration with: @FeBD8*
+
+---
 This project consists of a web application that allows management of a music playlist. 
 The web application is realised in 2 ways :
 *  _Pure Hmtl_ : With java servlets and thymeleaf for the presentation. 
